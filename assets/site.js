@@ -22,7 +22,7 @@
   var logo = document.querySelector(".top .logo img");
 
   /* ---------- Coriandoli e scintille sui bottoni ---------- */
-  var COLS = ["#FF3FA4", "#FF2D4A", "#FF6A00", "#FFB300", "#00C2D9", "#8A3FFF"];
+  var COLS = ["#FF2D55", "#F2B705", "#FFFFFF", "#C9D1DC", "#E3173F", "#FFE08A"];
   function confetti(x, y, n) {
     if (reduce) return;
     for (var i = 0; i < n; i++) {

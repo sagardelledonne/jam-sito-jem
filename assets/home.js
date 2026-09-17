@@ -8,7 +8,7 @@
 
   /* ---------- Titolo di particelle ---------- */
   var LINES = ["TESTA, CUORE", "E SPIRITO", "D'INIZIATIVA"];
-  var PALETTE = ["#FF3FA4", "#FF2D4A", "#FF6A00", "#FFB300", "#00C2D9", "#8A3FFF"];
+  var PALETTE = ["#FF2D55", "#E3173F", "#F2B705", "#FFE08A", "#8E9BAE", "#C9D1DC"];
   var WEIGHTS = [0.30, 0.20, 0.18, 0.12, 0.10, 0.10];
   var hero = document.getElementById("home"), canvas = document.getElementById("heroCanvas"), slot = document.getElementById("wordSlot");
   if (!hero || !canvas || !slot) return;

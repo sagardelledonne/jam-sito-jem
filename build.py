@@ -200,6 +200,16 @@ def faq(items, title="Le cose che ci chiedono tutti"):
 def sticker(name, style, fl=50, alt=""):
     return '<img class="sticker" src="%s/%s.webp" style="%s" data-float="%s" loading="lazy" alt="%s">' % (IMG, name, style, fl, html.escape(alt))
 
+MOOD_IDS = [4, 5, 6, 7, 9, 10, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+def mascotte_band(title="Le mascotte in tutte le salse", lede="Chef, scienziata, tifosa, farfalla, cantante: la nostra esploratrice e le mascotte cambiano costume ogni settimana sui social."):
+    imgs = "".join('<img src="%s/mood-%02d.webp" width="500" height="500" loading="lazy" alt="Le mascotte J@M">' % (IMG, i) for i in MOOD_IDS)
+    return '<section class="mascotte-band"><div class="wrap head" data-reveal><p class="eyebrow">J@M Mood</p><h2 class="mt">%s</h2><p class="lede mt">%s</p></div><div class="ribbon">%s%s</div></section>' % (title, lede, imgs, imgs)
+
+CONV = [("conv-1", "Dubai"), ("conv-15", "Cuba"), ("conv-13", "Mykonos"), ("conv-11", "Djerba"), ("conv-2", "Milano"), ("conv-14", "In viaggio"), ("conv-3", "Convention"), ("conv-5", "Convention"), ("conv-6", "Convention"), ("conv-7", "Convention"), ("conv-8", "Convention"), ("conv-9", "Convention"), ("conv-4", "Backstage")]
+def postcards(items, eyebrow="Cartoline animate", title="Dalle convention, finora…"):
+    cards = "".join('<figure class="postcard"><img src="%s/%s.webp" loading="lazy" alt="Cartolina animata dalla convention J@M: %s"><i></i><span>%s</span></figure>' % (IMG, f, c, c) for f, c in items)
+    return '<section class="pad-s"><div class="wrap"><div class="narrow" style="margin-bottom:32px" data-reveal><p class="eyebrow">%s</p><h2 class="mt">%s</h2></div><div class="postcards" data-stagger>%s</div></div></section>' % (eyebrow, title, cards)
+
 def cta_band(text, btn, href, sub=""):
     return '<section class="statement"><div class="wrap" data-reveal><p class="big" style="opacity:1">%s</p>%s<div class="ctas mt3" style="justify-content:center"><a class="btn btn-primary" href="%s">%s</a></div></div></section>' % (text, ('<p class="sub">%s</p>' % sub) if sub else "", href, btn)
 
@@ -311,7 +321,7 @@ body.js .word-slot .fallback { visibility: hidden; }
 .mood-band { position: relative; height: clamp(220px, 34vw, 440px); display: grid; place-items: center; overflow: hidden; }
 .mood-band .art-wrap { inset: -6%; }
 .mood-band .art.dim { filter: none; opacity: .45; }
-.mood-band .pattern { position: absolute; inset: -20% -50%; background: linear-gradient(90deg, #FF3FA4, #FFD400, #3DF2FF, #B36BFF, #FF3FA4); -webkit-mask: url(__A__/pattern-mood.webp) center/900px auto repeat; mask: url(__A__/pattern-mood.webp) center/900px auto repeat; opacity: .5; animation: panx 40s linear infinite; }
+.mood-band .pattern { position: absolute; inset: -20% -50%; background: linear-gradient(90deg, #FF2D55, #F2B705, #C9D1DC, #FF2D55); -webkit-mask: url(__A__/pattern-mood.webp) center/900px auto repeat; mask: url(__A__/pattern-mood.webp) center/900px auto repeat; opacity: .5; animation: panx 40s linear infinite; }
 .mood-band::after { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(255,247,251,.1), rgba(255,247,251,.85) 75%); }
 .mood-band h2 { position: relative; z-index: 2; font-size: clamp(4rem, 16vw, 15rem); font-weight: 800; letter-spacing: -0.06em; line-height: 1; text-transform: uppercase; }
 .mood-band .credit { position: absolute; right: var(--gutter); bottom: 12px; z-index: 2; font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; color: rgba(31,11,36,.55); }
@@ -321,11 +331,14 @@ body.js .word-slot .fallback { visibility: hidden; }
 .museo-head { display: grid; gap: 16px; max-width: 820px; }
 .museo-head h2 { font-size: clamp(3rem, 9vw, 8rem); text-transform: uppercase; }
 .sticker { position: absolute; pointer-events: none; z-index: 2; filter: drop-shadow(0 18px 30px rgba(255,63,164,.35)); will-change: transform; }
-.card .art { height: 190px; display: grid; place-items: center; margin: -10px 0 -20px; }
-.card .art img { max-height: 190px; width: auto; filter: drop-shadow(0 16px 30px rgba(255,63,164,.35)); transition: transform .5s cubic-bezier(.2,.7,.2,1); }
-.card:hover .art img { transform: scale(1.08) rotate(-3deg); }
-.card { min-height: 620px; grid-template-rows: auto auto auto 1fr auto; }
-.card .ic { height: 60px; } .card .ic img { height: 52px; }
+.card .ill-box { height: 210px; display: grid; place-items: center; margin: 0; }
+.card .ill-box img { max-height: 210px; max-width: 100%; width: auto; object-fit: contain; filter: drop-shadow(0 16px 30px rgba(255,63,164,.3)); transition: transform .5s cubic-bezier(.2,.7,.2,1); }
+.card:hover .ill-box img { transform: scale(1.06) rotate(-2deg); }
+.card { min-height: auto; grid-template-rows: auto auto 1fr; gap: 16px; padding: 24px 26px 26px; }
+.card .body { align-self: start; }
+.card h3 { font-size: clamp(1.35rem, 2vw, 1.7rem); }
+.card p { font-size: 1rem; }
+.card .link { color: var(--pink); font-weight: 700; }
 .step-ill { height: 150px; width: auto; margin: 0 auto 6px; filter: drop-shadow(0 16px 30px rgba(255,63,164,.3)); }
 .feat.step { text-align: center; justify-items: center; }
 .nums-sec, .faq-sec, .museo-sec, .statement { overflow: visible; }
@@ -336,7 +349,7 @@ body.js .word-slot .fallback { visibility: hidden; }
 .sedi-row a:hover img { transform: translateY(-6px) rotate(-4deg); }
 .museo-sec .museo-head { position: relative; z-index: 3; }
 .art-band .sticker { z-index: 3; }
-@media (max-width: 1000px) { .sticker { width: 80px !important; } .card { min-height: 560px; } .card .art { height: 150px; } .card .art img { max-height: 150px; } }
+@media (max-width: 1000px) { .sticker { width: 80px !important; } .card .ill-box { height: 160px; } .card .ill-box img { max-height: 160px; } }
 @media (max-width: 560px) { .sticker { display: none; } }
 .contact-art { position: relative; overflow: hidden; }
 .contact-art .art-wrap { inset: -6%; }
@@ -380,14 +393,14 @@ body.js .word-slot .fallback { visibility: hidden; }
 """.replace("__A__", A)
 
 PASSIONI_CARDS = [
-    ("telecomunicazioni", "#3DF2FF", "01", "icona-telecomunicazioni", 420, 334, "Telecomunicazioni", "Fibra, mobile e linee fisse per casa e ufficio. Per le aziende anche IoT e M2M. <b>Per chi:</b> casa · azienda"),
-    ("energia", "#FFD400", "02", "icona-energia", 309, 585, "Energia", "Confrontiamo la tua bolletta con le offerte aggiornate: attivazioni, volture, subentri e allacci, energia verde certificata. <b>Per chi:</b> casa · azienda · condominio"),
-    ("noleggio-auto", "#FF3FA4", "03", "icona-auto", 420, 370, "Auto noleggio", "Medio e lungo termine, tutto incluso. Anche elettrico, per entrare in ZTL senza pensieri. <b>Per chi:</b> azienda · professionisti"),
-    ("servizi-web", "#B36BFF", "04", "icona-web", 420, 420, "Servizi web", "Siti, SEO, social e campagne per farti trovare da chi ti cerca. Parliamo di clienti, non di tecnicismi. <b>Per chi:</b> azienda"),
-    ("efficientamento-energetico", "#FF6A00", "05", "icona-efficientamento", 420, 377, "Efficientamento energetico", "Fotovoltaico, pompe di calore, colonnine e infissi con gli incentivi in vigore: tu vedi solo il costo netto. <b>Per chi:</b> casa · condominio · azienda"),
+    ("telecomunicazioni", "#7C8A9E", "01", "icona-telecomunicazioni", 420, 334, "Telecomunicazioni", "Fibra, mobile e linee fisse per casa e ufficio. Per le aziende anche IoT e M2M. <b>Per chi:</b> casa · azienda"),
+    ("energia", "#E0A200", "02", "icona-energia", 309, 585, "Energia", "Confrontiamo la tua bolletta con le offerte aggiornate: attivazioni, volture, subentri e allacci, energia verde certificata. <b>Per chi:</b> casa · azienda · condominio"),
+    ("noleggio-auto", "#FF2D55", "03", "icona-auto", 420, 370, "Auto noleggio", "Medio e lungo termine, tutto incluso. Anche elettrico, per entrare in ZTL senza pensieri. <b>Per chi:</b> azienda · professionisti"),
+    ("servizi-web", "#B80F3A", "04", "icona-web", 420, 420, "Servizi web", "Siti, SEO, social e campagne per farti trovare da chi ti cerca. Parliamo di clienti, non di tecnicismi. <b>Per chi:</b> azienda"),
+    ("efficientamento-energetico", "#F08A00", "05", "icona-efficientamento", 420, 377, "Efficientamento energetico", "Fotovoltaico, pompe di calore, colonnine e infissi con gli incentivi in vigore: tu vedi solo il costo netto. <b>Per chi:</b> casa · condominio · azienda"),
 ]
 def passioni_cards():
-    return "".join("""<a class="card" href="%s/passioni/%s/" style="--acc:%s"><div class="k"><span>Passione</span><b>%s</b></div><div class="art"><img src="%s/%s.webp" loading="lazy" alt=""></div><div class="ic"><img src="%s/%s.webp" width="%d" height="%d" alt=""></div><div class="body"><h3>%s</h3><p>%s</p><span class="link">%s %s</span></div></a>""" % (BASE, slug, acc, n, IMG, {"telecomunicazioni": "ill-tlc-alexa", "energia": "ill-energia-malefica", "noleggio-auto": "ill-auto-tappeto", "servizi-web": "ill-web-alice", "efficientamento-energetico": "ill-eff-frozen-casa"}[slug], A, ic, w, h, t, p, {"telecomunicazioni": "richiedi un’offerta", "energia": "confronta la bolletta", "noleggio-auto": "chiedi un preventivo", "servizi-web": "raccontaci il progetto", "efficientamento-energetico": "prenota un sopralluogo"}[slug], chev) for slug, acc, n, ic, w, h, t, p in PASSIONI_CARDS)
+    return "".join("""<a class="card" href="%s/passioni/%s/" style="--acc:%s"><div class="k"><span>Passione</span><b>%s</b></div><div class="ill-box"><img src="%s/%s.webp" loading="lazy" alt=""></div><div class="body"><h3>%s</h3><p>%s</p><span class="link">%s %s</span></div></a>""" % (BASE, slug, acc, n, IMG, {"telecomunicazioni": "ill-tlc-alexa", "energia": "ill-energia-malefica", "noleggio-auto": "ill-auto-tappeto", "servizi-web": "ill-web-alice", "efficientamento-energetico": "ill-eff-frozen-casa"}[slug], t, p, {"telecomunicazioni": "richiedi un’offerta", "energia": "confronta la bolletta", "noleggio-auto": "chiedi un preventivo", "servizi-web": "raccontaci il progetto", "efficientamento-energetico": "prenota un sopralluogo"}[slug], chev) for slug, acc, n, ic, w, h, t, p in PASSIONI_CARDS)
 
 HOME_BODY = """
 <section class="art-hero tall hero-home" id="home">%(art)s<div class="veil"></div><canvas id="heroCanvas" aria-hidden="true"></canvas>
@@ -432,8 +445,10 @@ HOME_BODY = """
   </div></div>
 </section>
 
+%(mascotte)s
 <section class="pad-s museo-sec"><div class="wrap"><div class="museo-head" data-reveal><p class="eyebrow">J@M Mood</p><h2>Museo</h2><p class="lede">J@M è uno specchio di così tante personalità ed esperienze diverse che non potrà mai restare identica a sé stessa a lungo. <b>Ogni sede ospita un capolavoro reinterpretato con la nostra esploratrice dai capelli rossi:</b> Van Gogh a Milano, Botticelli a Cantù, Gauguin a Torino, Amano a Lecce…</p><div class="ctas"><a class="btn btn-primary" href="%(b)s/jm-mood/museo/">fatti ispirare</a></div></div></div>%(st_museo)s</section>
 %(wall)s
+%(postcards)s
 
 <section class="art-band">%(art_comm)s<div class="veil"></div><div class="wrap"><p class="eyebrow">La nostra community</p><blockquote>Se nasce una nuova piattaforma, un nuovo modo di connettersi, noi vogliamo essere i primi a scoprirla… per questo siamo ovunque.</blockquote><p class="lede">Seguici dove preferisci: raccontiamo l’isola ogni settimana.</p>%(socials)s</div>%(st_comm)s<span class="credit">Sandro Botticelli, La primavera · Museo J@M</span></section>
 %(ig)s
@@ -456,7 +471,7 @@ HOME_BODY = """
        "st_comm": sticker("ill-community-telefono", "right:3%;bottom:0;width:clamp(160px,22vw,340px)", 30, "La ragazza J@M esce dallo smartphone"),
        "st_isola": sticker("ill-mettici-passione", "left:2%;top:12%;width:clamp(100px,14vw,220px);z-index:4", 40, "Mettici passione"),
        "sedi": "".join('<a href="%s/i-villaggi/" title="%s"><img src="%s/%s.webp" loading="lazy" alt="La sede di %s"><span>%s</span></a>' % (BASE, c, IMG, f, c, c) for f, c in [("sede-milano", "Milano"), ("sede-cantu", "Cantù"), ("sede-torino", "Torino"), ("sede-lecce", "Lecce"), ("sede-bacau", "Bacău")]),
-       "art_klimt": art("art-klimt"), "cards": passioni_cards(), "tv": tv_set("512464979"), "wall": museo_wall(MUSEO_WORKS[:14], "museo-parete"), "socials": SOCIALS, "ig": ig_band(), "form": form_section(), "lightbox": LIGHTBOX}
+       "art_klimt": art("art-klimt"), "mascotte": mascotte_band(), "postcards": postcards(CONV[:6], title="Cartoline animate dalle convention"), "cards": passioni_cards(), "tv": tv_set("512464979"), "wall": museo_wall(MUSEO_WORKS[:14], "museo-parete"), "socials": SOCIALS, "ig": ig_band(), "form": form_section(), "lightbox": LIGHTBOX}
 
 HOME_JS = """<script src="%s/home.js" defer></script>
 <script>document.addEventListener("DOMContentLoaded",function(){var t=document.getElementById("track");document.getElementById("prevCard").addEventListener("click",function(){t.scrollBy({left:-400,behavior:"smooth"})});document.getElementById("nextCard").addEventListener("click",function(){t.scrollBy({left:400,behavior:"smooth"})});});</script>""" % A
@@ -624,6 +639,7 @@ page(BASE + "/jm-mood/", "J@M Mood | Le etichette sono per i prodotti, non per l
      + split("TV", "<p>Tutto ciò che è J@M è online. Fatti prendere da J@M!</p>", "ill-mood-rec", "La ragazza J@M davanti alla telecamera", ctas='<a class="btn btn-primary" href="%s/jm-mood/tv/">buona visione</a>' % BASE)
      + split("Museo", "<p>Il fascino dell’ignoto, il gusto della scoperta che solo una realtà sempre uguale e sempre diversa come J@M ti può dare.</p>", "ill-mood-pittrice", "La ragazza J@M davanti al cavalletto", rev=True, ctas='<a class="btn btn-primary" href="%s/jm-mood/museo/">tutte le opere</a>' % BASE)
      + split("Community", "<p>Se nasce una nuova piattaforma, un nuovo modo di connettersi, noi vogliamo essere i primi a scoprirla… per questo siamo ovunque.</p>", "ill-community-telefono", "La ragazza J@M esce dallo smartphone", ctas='<a class="btn btn-primary" href="%s/jm-mood/community/">villaggi virtuali</a>' % BASE)
+     + mascotte_band()
      + split("Session", "<p>Amiamo la condivisione. Per questo abbiamo dato inizio alle nostre Convention!</p>", "ill-session-globo", "La ragazza J@M sul mappamondo", rev=True, ctas='<a class="btn btn-primary" href="%s/jm-mood/jm-session/">tutte le convention</a><a class="link" href="%s/jm-mood/jm-session/#perilmondo">nel mondo %s</a><a class="link" href="%s/jm-mood/jm-session/#conventionitalia">in Italia %s</a>' % (BASE, BASE, chev, BASE, chev)), og_image=IMG + "/ill-mood-pittrice.webp")
 
 # ================================================================ TV
@@ -632,6 +648,7 @@ page(BASE + "/jm-mood/tv/", "J@M TV | Tutti i video",
      "Tutti immortalati nei momenti più belli e più improbabili: i video di J@M.",
      hero("art-hopper", "TV", ill="ill-tv-logo", ill_alt="TV J@M", lede="Tutti immortalati nei momenti più belli e più improbabili. Stili di vita, visioni, prospettive, personalità. Tutto al plurale. Non ci piace semplificarci e descriverci in poche righe.", eyebrow="J@M Mood", credit="Edward Hopper, I nottambuli · Museo J@M", size="short")
      + '<section class="pad-s"><div class="wrap">' + tv_set("512464979") + '</div></section>'
+     + postcards(CONV[:3], title="Momenti dalle convention")
      + videos(TV_IDS, eyebrow="Lasciati ispirare", title="Fatti prendere da J@M")
      + """<section class="pad-s"><div class="wrap"><div class="feats" data-stagger>
 <div class="feat"><span class="k">Lasciati ispirare</span><h3>Scopri l’isola</h3><p><a class="link" href="%(b)s/lisola/manifesto/">il manifesto %(c)s</a></p></div>
@@ -668,6 +685,7 @@ page(BASE + "/jm-mood/jm-session/", "J@M Session | Le convention di J@M nel mond
      + art_band("art-gauguin", "In ogni Convention abbiamo portato la nostra isola per il mondo.", credit="Paul Gauguin, La siesta · Museo J@M", eyebrow="J@M Session")
      + '<section class="pad-s" id="perilmondo"><div class="wrap narrow"><p class="eyebrow" data-reveal>Nel mondo · …finora…</p><h2 class="mt" style="margin-bottom:40px" data-reveal>Nel mondo</h2>%s</div></section>' % tl(MONDO)
      + '<section class="pad-s" id="conventionitalia"><div class="wrap narrow"><p class="eyebrow" data-reveal>In Italia · …finora…</p><h2 class="mt" style="margin-bottom:40px" data-reveal>In Italia</h2>%s</div></section>' % tl(ITALIA)
+     + postcards(CONV, title="Cartoline animate: Dubai, Cuba, Mykonos, Djerba…")
      + videos(SESSION_IDS, eyebrow="In video", title="Le convention")
      + cta_band("C'è ancora molto altro...", "continua a guardare", "https://vimeo.com/jamsrl"), og_image=IMG + "/ill-session-globo.webp")
 
