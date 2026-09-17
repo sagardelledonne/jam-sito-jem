@@ -177,7 +177,7 @@
       if (zone) {
         var pz = clamp((vh * 0.6 - zr.top) / (zr.height + vh * 0.2), 0, 1);
         if (zone.classList.contains("wall-pin")) { tx = zr.left + 20 + pz * (vw - gw - 40); ty = Math.max(gh * 0.45, vh * 0.62 - gh); }
-        else { tx = zr.left + zr.width * 0.06 + pz * (zr.width * 0.88 - gw); ty = clamp(zr.top + zr.height * 0.66 - gh, gh * 0.45, vh - gh - 8); }
+        else { tx = zr.left + zr.width * 0.06 + pz * (zr.width * 0.88 - gw); var yy = zone.classList.contains("art-hero") ? zr.bottom - gh - 70 : zr.top + zr.height * 0.66 - gh; ty = clamp(yy, gh * 0.45, vh - gh - 8); }
         hop = 0;
         ts = vw < 700 ? 0.9 : 1; facing = g.vel >= -0.5 ? 1 : -1; g.inArt = true;
       } else {

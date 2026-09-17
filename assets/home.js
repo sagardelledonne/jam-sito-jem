@@ -8,14 +8,14 @@
 
   /* ---------- Titolo di particelle ---------- */
   var LINES = ["TESTA, CUORE", "E SPIRITO", "D'INIZIATIVA"];
-  var PALETTE = ["#FF2D55", "#E3173F", "#F2B705", "#FFE08A", "#8E9BAE", "#C9D1DC"];
-  var WEIGHTS = [0.30, 0.20, 0.18, 0.12, 0.10, 0.10];
+  var PALETTE = ["#FF2D55", "#C4123A", "#8E0B2A", "#E8A800", "#B8860B", "#2A0A12"];
+  var WEIGHTS = [0.30, 0.24, 0.14, 0.14, 0.10, 0.08];
   var hero = document.getElementById("home"), canvas = document.getElementById("heroCanvas"), slot = document.getElementById("wordSlot");
   if (!hero || !canvas || !slot) return;
   var ctx = canvas.getContext("2d");
   var off = document.createElement("canvas"), octx = off.getContext("2d", { willReadFrequently: true });
   var dpr = Math.min(window.devicePixelRatio || 1, 2);
-  var W = 0, H = 0, N = isMobile ? 2200 : 4200, STEP = isMobile ? 3 : 5, SIZE = isMobile ? 1.7 : 2.2;
+  var W = 0, H = 0, N = isMobile ? 2600 : 6500, STEP = isMobile ? 3 : 4, SIZE = isMobile ? 2.2 : 3;
   var parts = [], mouse = { x: -9999, y: -9999 };
   var state = "form", stateT = 0, running = true, raf = 0, ready = false;
   var HOLD = 4200, FORM = 1400, EXPLODE = 850;
