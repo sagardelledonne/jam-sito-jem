@@ -38,20 +38,22 @@ NAV = [
     ("Passioni", BASE + "/passioni/", [("Telecomunicazioni", BASE + "/passioni/telecomunicazioni/"), ("Energia", BASE + "/passioni/energia/"), ("Auto noleggio", BASE + "/passioni/noleggio-auto/"), ("Servizi web", BASE + "/passioni/servizi-web/"), ("Efficientamento energetico", BASE + "/passioni/efficientamento-energetico/")]),
     ("J@M Mood", BASE + "/jm-mood/", [("TV", BASE + "/jm-mood/tv/"), ("Museo", BASE + "/jm-mood/museo/"), ("Community", BASE + "/jm-mood/community/"), ("J@M Session", BASE + "/jm-mood/jm-session/")]),
     ("I villaggi", BASE + "/i-villaggi/", []),
+    ("Contatti", BASE + "/#contatti", []),
 ]
+NAV_TITLES = {"L’isola": "Chi siamo", "Passioni": "I nostri servizi", "J@M Mood": "La nostra cultura"}
 
 def header(path):
     items = []
     for label, href, sub in NAV:
         cur = ' aria-current="page"' if path == href else ""
         if sub:
-            dd = "".join('<a href="%s">%s</a>' % (h, l) for l, h in sub)
+            dd = ('<span class="ddt">%s</span>' % NAV_TITLES.get(label, "")) + "".join('<a href="%s">%s</a>' % (h, l) for l, h in sub)
             items.append('<div><a href="%s"%s>%s</a><button type="button" aria-haspopup="true" aria-label="Apri %s"><svg><use href="#i-down"/></svg></button><div class="dd">%s</div></div>' % (href, cur, label, label, dd))
         else:
             items.append('<div><a href="%s"%s>%s</a></div>' % (href, cur, label))
     mob = []
     for label, href, sub in NAV:
-        mob.append('<div class="grp"><a href="%s">%s</a>%s</div>' % (href, label, ('<div class="sub">' + "".join('<a href="%s">%s</a>' % (h, l) for l, h in sub) + '</div>') if sub else ""))
+        mob.append('<div class="grp"><a href="%s">%s</a>%s</div>' % (href, label + ((' <small>· %s</small>' % NAV_TITLES[label]) if label in NAV_TITLES else ""), ('<div class="sub">' + "".join('<a href="%s">%s</a>' % (h, l) for l, h in sub) + '</div>') if sub else ""))
     return """
 <header class="top" id="top"><div class="wrap">
   <a class="logo" href="%s/" aria-label="J@M Passion — home"><img src="%s/logo.webp" width="506" height="287" alt="J@M Passion"></a>
@@ -62,17 +64,17 @@ def header(path):
     <button class="icon-btn burger" id="burger" aria-label="Apri il menu" aria-expanded="false" aria-controls="menu"><svg><use href="#i-menu"/></svg></button>
   </div>
 </div></header>
-<nav class="menu" id="menu" aria-label="Menu"><button class="icon-btn close" id="menuClose" aria-label="Chiudi il menu"><svg><use href="#i-x"/></svg></button>%s<div class="grp"><a href="%s/#contatti">Contatti</a></div></nav>
-""" % (BASE, IMG.replace("/img", ""), "".join(items), "".join(mob), BASE)
+<nav class="menu" id="menu" aria-label="Menu"><button class="icon-btn close" id="menuClose" aria-label="Chiudi il menu"><svg><use href="#i-x"/></svg></button>%s</nav>
+""" % (BASE, IMG.replace("/img", ""), "".join(items), "".join(mob))
 
 FOOTER = """
 <footer class="site-footer"><div class="wrap">
   <div class="grid">
     <nav aria-label="Footer"><a href="%(b)s/lisola/">L’isola</a><a href="%(b)s/passioni/">Passioni</a><a href="%(b)s/jm-mood/">Mood</a><a href="%(b)s/i-villaggi/">I villaggi</a><a href="https://www.iubenda.com/privacy-policy/91688595" rel="noopener">Privacy policy</a><a href="https://www.iubenda.com/privacy-policy/91688595/cookie-policy" rel="noopener">Utilizzo dei cookie</a></nav>
     <div class="brand"><img src="%(a)s/logo.webp" width="506" height="287" alt="J@M Passion"><span class="claim">mettici passione</span></div>
-    <div class="addr"><a href="https://www.google.com/maps/place/J@M+SRL/@45.4402045,9.1993427,15z" rel="noopener">Via Rutilia 2,4<br>20141 - Milano (MI)</a><a href="mailto:jam@jam-srl.it">jam@jam-srl.it</a><a href="tel:02898094">02 898094</a><a href="tel:0289809480">02 89809480</a></div>
+    <div class="addr"><a href="https://www.google.com/maps/place/J@M+SRL/@45.4402045,9.1993427,15z" rel="noopener">Via Rutilia 2,4<br>20141 - Milano (MI)</a><a href="mailto:jam@jam-srl.it">jam@jam-srl.it</a><a href="tel:02898094">02 898094</a><a href="https://api.whatsapp.com/send?phone=+3902898094" rel="noopener">WhatsApp</a><span style="font-size:.8rem;color:var(--muted)">I villaggi: Milano · Cantù · Torino · Lecce · Bacău</span></div>
   </div>
-  <p class="rights">Tutti i diritti riservati © J@M srl · P.IVA 13329170156 · Designed by J@M</p>
+  <p class="rights">Tutti i diritti riservati © J@M srl · P.IVA 13329170156 · Via Rutilia 2,4 Milano · dal 2001 · mettici passione</p>
 </div></footer>
 <button class="totop" id="totop" aria-label="Torna su"><img src="%(a)s/mascotte-mini.webp" width="100" height="87" alt=""></button>
 <img class="guide" id="guide" src="%(i)s/girl-standing.webp" data-stand="%(i)s/girl-standing.webp" data-sit="%(i)s/girl-sitting.webp" width="246" height="655" alt="">
@@ -112,7 +114,7 @@ def feats(items, eyebrow="", title="", lede="", ident=""):
     return '<section class="pad-s"%s><div class="wrap">%s<div class="feats" data-stagger>%s</div></div></section>' % ((' id="%s"' % ident) if ident else "", head, cards)
 
 def statement(text, sub="", light="", eyebrow=""):
-    return '<section class="statement"><div class="wrap">%s<p class="big" data-light="%s">%s</p>%s</div></section>' % (('<p class="eyebrow" style="margin-bottom:22px">%s</p>' % eyebrow) if eyebrow else "", light, text, ('<p class="sub">%s</p>' % sub) if sub else "")
+    return '<section class="statement">%s<div class="wrap">%s<p class="big" data-light="%s">%s</p>%s</div></section>' % (sticker("mascotte-mini", "right:6%;top:30px;width:clamp(50px,6vw,90px);transform:rotate(12deg)", 40),('<p class="eyebrow" style="margin-bottom:22px">%s</p>' % eyebrow) if eyebrow else "", light, text, ('<p class="sub">%s</p>' % sub) if sub else "")
 
 def art_band(artname, quote, credit="", ctas="", eyebrow="", lit=True):
     return '<section class="art-band">%s<div class="veil"></div><div class="wrap">%s<blockquote>%s</blockquote>%s</div>%s</section>' % (
@@ -129,16 +131,17 @@ def videos(ids, eyebrow="", title="", lede="", first_wide=False):
 def tv_set(vid):
     return '<div class="tv-set" data-reveal><img src="%s/tv.webp" width="1080" height="1080" alt="Il televisore di J@M"><div class="screen"><iframe src="https://player.vimeo.com/video/%s?dnt=1&title=0&byline=0&portrait=0&color=ff6a00" title="Video J@M" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div></div>' % (BASE + "/assets", vid)
 
-def form_section(title="Vuoi chiederci qualcosa?", lede="Compila il form e ti ricontatteremo presto per fornirti tutte le informazioni di cui hai bisogno.", subject="Richiesta dal sito J@M", msg_label="Il tuo messaggio (facoltativo)", extra_fields="", phone=True, button="invia"):
+def form_section(title="Vuoi chiederci qualcosa?", lede="Compila il form: ti richiama un consulente entro un giorno lavorativo. Gratis, senza impegno, e se la tua offerta attuale è già la migliore te lo diciamo.", subject="Richiesta dal sito J@M", msg_label="Il tuo messaggio (facoltativo)", extra_fields="", phone=True, button="invia"):
     return """
 <section class="contact" id="contatti"><div class="wrap">
-  <div data-reveal><p class="eyebrow">Contatti</p><h2 class="mt">%s</h2><p class="lede">%s</p>%s<img class="contact-mascot" src="%s/mascotte.webp" width="444" height="363" alt=""></div>
+  <div data-reveal><p class="eyebrow">Contatti</p><h2 class="mt">%s</h2><p class="lede">%s</p>%s<img class="contact-mascot" src="%s/img/ill-abitanti-cassetta.webp" width="444" height="444" alt="La ragazza J@M imbuca una lettera"></div>
   <form class="panel" novalidate data-reveal data-subject="%s">
     <div class="field"><label for="c-nome">Nome Cognome / Ragione sociale</label><input id="c-nome" name="nome" type="text" autocomplete="name" required></div>
     <div class="row2"><div class="field"><label for="c-email">La tua email</label><input id="c-email" name="email" type="email" autocomplete="email" required></div><div class="field"><label for="c-tel">Il tuo telefono</label><input id="c-tel" name="telefono" type="tel" autocomplete="tel" required></div></div>
+    <div class="row2"><div class="field"><label for="c-profilo">Sono</label><select id="c-profilo" name="profilo"><option>Un privato</option><option>Un’azienda o un professionista</option><option>Un amministratore di condominio</option><option>Voglio candidarmi come consulente</option></select></div><div class="field"><label for="c-servizio">Mi interessa</label><select id="c-servizio" name="servizio"><option>Luce e gas</option><option>Fotovoltaico ed efficientamento</option><option>Telefonia e internet</option><option>Noleggio auto</option><option>Sito web e marketing</option><option>Non so ancora: voglio un confronto</option></select></div></div>
     %s<div class="field"><label for="c-msg">%s</label><textarea id="c-msg" name="messaggio"></textarea></div>
     <button class="btn btn-red" type="submit">%s</button><p class="sent" role="status"></p>
-    <p class="legal">Cliccando su invia dichiari di aver preso visione e di accettare la nostra <a href="https://www.iubenda.com/privacy-policy/91688595" rel="noopener">privacy policy</a>.</p>
+    <p class="legal">Cliccando su invia dichiari di aver preso visione e di accettare la nostra <a href="https://www.iubenda.com/privacy-policy/91688595" rel="noopener">privacy policy</a>. Niente newsletter, niente pubblicità: solo la risposta alla tua richiesta.</p>
   </form>
 </div></section>""" % (title, lede, ('<a class="phone" href="tel:02898094"><svg><use href="#i-phone"/></svg>02 898094</a>' if phone else ""), BASE + "/assets", html.escape(subject), extra_fields, msg_label, button)
 
@@ -181,7 +184,21 @@ def museo_wall(works, ident="museo"):
     return '<section class="wall-pin" id="%s"><div class="wall-stage"><div class="wall-track">%s</div></div></section>' % (ident, "".join(figure(w) for w in works))
 def museo_grid(works):
     return '<section class="pad-s"><div class="wrap"><div class="wall-grid" data-stagger>%s</div></div></section>' % "".join(figure(w) for w in works)
-LIGHTBOX = '<div class="lightbox" id="lightbox" role="dialog" aria-label="Opera ingrandita"><figure style="margin:0"><img src="" alt=""><figcaption></figcaption></figure></div>'
+LIGHTBOX = '<div class="lightbox" id="lightbox" role="dialog" aria-label="Opera ingrandita"><figure style="margin:0"><img alt=""><figcaption></figcaption></figure></div>'
+
+def steps(items, eyebrow="Come funziona", title="Come si sbarca sull’isola", lede=""):
+    ills = ["ill-storia-libro", "ill-energia-orologio", "ill-eff-mascotte-foglio"]
+    cards = "".join('<div class="feat step"><img class="step-ill" src="%s/%s.webp" loading="lazy" alt=""><span class="k">Mossa %d</span><h3>%s</h3><p>%s</p>%s</div>' % (IMG, ills[i % 3], i + 1, t, d, ('<span class="meta">%s</span>' % m) if m else "") for i, (t, d, m) in enumerate(items))
+    return '<section class="pad-s"><div class="wrap"><div class="narrow" style="margin-bottom:36px" data-reveal><p class="eyebrow">%s</p><h2 class="mt">%s</h2>%s</div><div class="feats" data-stagger>%s</div></div></section>' % (eyebrow, title, ('<p class="lede mt">%s</p>' % lede) if lede else "", cards)
+
+def numbers(items):
+    return '<section class="pad-s nums-sec"><div class="wrap"><div class="nums" data-stagger>%s</div></div>%s%s</section>' % ("".join('<div class="num"><b class="grad">%s</b><span>%s</span></div>' % (n, l) for n, l in items), sticker("ill-storia-mongolfiera", "right:2%;top:-40px;width:clamp(120px,16vw,240px)", 70, "La mongolfiera Amici carissimi"), sticker("ill-tlc-pesci", "left:1%;bottom:-30px;width:clamp(90px,11vw,170px)", 40))
+
+def faq(items, title="Le cose che ci chiedono tutti"):
+    return '<section class="pad-s faq-sec" id="domande"><div class="wrap narrow"><p class="eyebrow" data-reveal>Domande frequenti</p><h2 class="mt" style="margin-bottom:32px" data-reveal>%s</h2><div class="faq" data-stagger>%s</div></div>%s%s</section>' % (title, "".join('<details%s><summary>%s<span class="pm">+</span></summary><p class="a">%s</p></details>' % (" open" if i == 0 else "", q, a) for i, (q, a) in enumerate(items)), sticker("mascotte-occhiali", "right:3%;top:40px;width:clamp(90px,12vw,180px)", 40), sticker("ill-tlc-clessidra", "left:2%;bottom:20px;width:clamp(100px,13vw,200px)", 60, "La sirena J@M con la clessidra"))
+
+def sticker(name, style, fl=50, alt=""):
+    return '<img class="sticker" src="%s/%s.webp" style="%s" data-float="%s" loading="lazy" alt="%s">' % (IMG, name, style, fl, html.escape(alt))
 
 def cta_band(text, btn, href, sub=""):
     return '<section class="statement"><div class="wrap" data-reveal><p class="big" style="opacity:1">%s</p>%s<div class="ctas mt3" style="justify-content:center"><a class="btn btn-primary" href="%s">%s</a></div></div></section>' % (text, ('<p class="sub">%s</p>' % sub) if sub else "", href, btn)
@@ -303,6 +320,42 @@ body.js .word-slot .fallback { visibility: hidden; }
 .tvh h2 { font-size: clamp(3rem, 8vw, 7rem); text-transform: uppercase; }
 .museo-head { display: grid; gap: 16px; max-width: 820px; }
 .museo-head h2 { font-size: clamp(3rem, 9vw, 8rem); text-transform: uppercase; }
+.sticker { position: absolute; pointer-events: none; z-index: 2; filter: drop-shadow(0 18px 30px rgba(255,63,164,.35)); will-change: transform; }
+.card .art { height: 190px; display: grid; place-items: center; margin: -10px 0 -20px; }
+.card .art img { max-height: 190px; width: auto; filter: drop-shadow(0 16px 30px rgba(255,63,164,.35)); transition: transform .5s cubic-bezier(.2,.7,.2,1); }
+.card:hover .art img { transform: scale(1.08) rotate(-3deg); }
+.card { min-height: 620px; grid-template-rows: auto auto auto 1fr auto; }
+.card .ic { height: 60px; } .card .ic img { height: 52px; }
+.step-ill { height: 150px; width: auto; margin: 0 auto 6px; filter: drop-shadow(0 16px 30px rgba(255,63,164,.3)); }
+.feat.step { text-align: center; justify-items: center; }
+.nums-sec, .faq-sec, .museo-sec, .statement { overflow: visible; }
+.nums-sec .wrap, .faq-sec .wrap { position: relative; z-index: 3; }
+.sedi-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 26px; }
+.sedi-row a { text-decoration: none; display: grid; justify-items: center; gap: 6px; width: 92px; font-size: .78rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--paper); }
+.sedi-row img { width: 82px; height: 82px; object-fit: contain; filter: drop-shadow(0 10px 20px rgba(255,63,164,.35)); transition: transform .3s ease; }
+.sedi-row a:hover img { transform: translateY(-6px) rotate(-4deg); }
+.museo-sec .museo-head { position: relative; z-index: 3; }
+.art-band .sticker { z-index: 3; }
+@media (max-width: 1000px) { .sticker { width: 80px !important; } .card { min-height: 560px; } .card .art { height: 150px; } .card .art img { max-height: 150px; } }
+@media (max-width: 560px) { .sticker { display: none; } }
+.contact-art { position: relative; overflow: hidden; }
+.contact-art .art-wrap { inset: -6%; }
+.contact-art .veil { position: absolute; inset: 0; background: linear-gradient(to bottom, var(--bg) 0%, rgba(255,247,251,.55) 30%, rgba(255,247,251,.6) 100%); }
+.contact-art .contact { position: relative; z-index: 2; }
+.contact-art .credit { position: absolute; right: var(--gutter); bottom: 14px; z-index: 3; font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; color: rgba(31,11,36,.6); }
+.feat.step .meta { display: block; font-size: .8rem; color: var(--muted); border-top: 1px dashed rgba(31,11,36,.15); padding-top: 10px; margin-top: 6px; }
+.nums { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+.num b { display: block; font-weight: 800; font-size: clamp(2.8rem, 6vw, 5.4rem); letter-spacing: -0.05em; line-height: 1; }
+.num span { display: block; margin-top: 8px; color: var(--muted); font-size: 1rem; max-width: 22ch; }
+.faq { display: grid; gap: 10px; }
+.faq details { background: rgba(255,255,255,.85); border: 1px solid rgba(255,63,164,.25); border-radius: 18px; }
+.faq summary { cursor: pointer; list-style: none; padding: 18px 22px; font-weight: 600; display: flex; justify-content: space-between; gap: 16px; align-items: center; font-size: 1.05rem; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq .pm { width: 28px; height: 28px; flex: none; border-radius: 50%; border: 1px solid rgba(255,63,164,.4); display: grid; place-items: center; color: var(--pink); font-weight: 700; }
+.faq details[open] .pm { background: var(--pink); color: #fff; }
+.faq .a { padding: 0 22px 20px; color: var(--muted); max-width: 68ch; }
+@media (max-width: 1000px) { .nums { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .nums { grid-template-columns: 1fr 1fr; gap: 16px; } }
 /* Villaggi: la pioggia di Magritte */
 .villaggi .art.dim { filter: none; opacity: .4; animation: rain 24s linear infinite; }
 .villaggi .art.lit { animation: rain 24s linear infinite; }
@@ -327,34 +380,37 @@ body.js .word-slot .fallback { visibility: hidden; }
 """.replace("__A__", A)
 
 PASSIONI_CARDS = [
-    ("telecomunicazioni", "#3DF2FF", "01", "icona-telecomunicazioni", 420, 334, "Telecomunicazioni", "Piani Telefonia e Internet"),
-    ("energia", "#FFD400", "02", "icona-energia", 309, 585, "Energia", "Forniture luce e gas, nuovi allacci, subentri e volture"),
-    ("noleggio-auto", "#FF3FA4", "03", "icona-auto", 420, 370, "Auto noleggio", "A medio e lungo termine"),
-    ("servizi-web", "#B36BFF", "04", "icona-web", 420, 420, "Servizi web", "Web Design, SEO, Digital Marketing, Social Media"),
-    ("efficientamento-energetico", "#FF6A00", "05", "icona-efficientamento", 420, 377, "Efficientamento energetico", "Superbonus ed Ecobonus per immobili indipendenti e condomini"),
+    ("telecomunicazioni", "#3DF2FF", "01", "icona-telecomunicazioni", 420, 334, "Telecomunicazioni", "Fibra, mobile e linee fisse per casa e ufficio. Per le aziende anche IoT e M2M. <b>Per chi:</b> casa · azienda"),
+    ("energia", "#FFD400", "02", "icona-energia", 309, 585, "Energia", "Confrontiamo la tua bolletta con le offerte aggiornate: attivazioni, volture, subentri e allacci, energia verde certificata. <b>Per chi:</b> casa · azienda · condominio"),
+    ("noleggio-auto", "#FF3FA4", "03", "icona-auto", 420, 370, "Auto noleggio", "Medio e lungo termine, tutto incluso. Anche elettrico, per entrare in ZTL senza pensieri. <b>Per chi:</b> azienda · professionisti"),
+    ("servizi-web", "#B36BFF", "04", "icona-web", 420, 420, "Servizi web", "Siti, SEO, social e campagne per farti trovare da chi ti cerca. Parliamo di clienti, non di tecnicismi. <b>Per chi:</b> azienda"),
+    ("efficientamento-energetico", "#FF6A00", "05", "icona-efficientamento", 420, 377, "Efficientamento energetico", "Fotovoltaico, pompe di calore, colonnine e infissi con gli incentivi in vigore: tu vedi solo il costo netto. <b>Per chi:</b> casa · condominio · azienda"),
 ]
 def passioni_cards():
-    return "".join("""<a class="card" href="%s/passioni/%s/" style="--acc:%s"><div class="k"><span>Passione</span><b>%s</b></div><div class="ic"><img src="%s/%s.webp" width="%d" height="%d" alt=""></div><div class="body"><h3>%s</h3><p>%s</p><span class="link">scopri %s</span></div></a>""" % (BASE, slug, acc, n, A, ic, w, h, t, p, chev) for slug, acc, n, ic, w, h, t, p in PASSIONI_CARDS)
+    return "".join("""<a class="card" href="%s/passioni/%s/" style="--acc:%s"><div class="k"><span>Passione</span><b>%s</b></div><div class="art"><img src="%s/%s.webp" loading="lazy" alt=""></div><div class="ic"><img src="%s/%s.webp" width="%d" height="%d" alt=""></div><div class="body"><h3>%s</h3><p>%s</p><span class="link">%s %s</span></div></a>""" % (BASE, slug, acc, n, IMG, {"telecomunicazioni": "ill-tlc-alexa", "energia": "ill-energia-malefica", "noleggio-auto": "ill-auto-tappeto", "servizi-web": "ill-web-alice", "efficientamento-energetico": "ill-eff-frozen-casa"}[slug], A, ic, w, h, t, p, {"telecomunicazioni": "richiedi un’offerta", "energia": "confronta la bolletta", "noleggio-auto": "chiedi un preventivo", "servizi-web": "raccontaci il progetto", "efficientamento-energetico": "prenota un sopralluogo"}[slug], chev) for slug, acc, n, ic, w, h, t, p in PASSIONI_CARDS)
 
 HOME_BODY = """
 <section class="art-hero tall hero-home" id="home">%(art)s<div class="veil"></div><canvas id="heroCanvas" aria-hidden="true"></canvas>
   <div class="wrap">
-    <p class="eyebrow">Consulenza professionale per imprese e privati</p>
+    <p class="eyebrow">Consulenza per casa, azienda e condominio · Milano e tutta Italia, dal 2001</p>
     <h1><span class="word-slot" id="wordSlot"><span class="fallback grad">Testa, cuore<br>e spirito<br>d'iniziativa</span><span class="sr-only">Testa, cuore e spirito d'iniziativa</span></span></h1>
-    <p class="lede">In J@M si crea, si sperimenta, si scommette perché le strade inesplorate nascondono un mare di possibilità.</p>
-    <div class="ctas" style="justify-content:center"><a class="btn btn-primary" href="%(b)s/lisola/manifesto/">manifesto</a><a class="link" href="#contatti">Vuoi chiederci qualcosa? %(chev)s</a></div>
+    <p class="lede"><b>Luce e gas, fotovoltaico, telefonia, noleggio auto e web: un solo consulente che ti segue davvero.</b> In J@M si crea, si sperimenta, si scommette perché le strade inesplorate nascondono un mare di possibilità.</p>
+    <div class="ctas" style="justify-content:center"><a class="btn btn-primary" href="#contatti">richiedi una consulenza gratuita</a><a class="link" href="%(b)s/lisola/manifesto/">leggi il manifesto %(chev)s</a></div>
   </div>
   <img class="hero-mascot bouncy" src="%(a)s/mascotte.webp" width="444" height="363" alt="">
+  %(st_hero)s
   <p class="hero-hint"><i></i> Scorri</p><p class="hero-tap">Clicca per far esplodere</p>
   <span class="credit">M.C. Escher, Giorno e notte · Museo J@M</span>
 </section>
 
 <section class="pad" id="passioni"><div class="wrap">
-  <div class="passioni-head" data-reveal><img class="occhiali bouncy" src="%(a)s/mascotte-occhiali.webp" width="444" height="363" alt=""><h2>Le nostre passioni</h2><p class="lede">Una gamma completa di servizi per la tua casa e per il tuo business</p></div>
-  <div class="curtain" id="curtain"><div class="curtain-art" style="background-image:url(%(i)s/art-vettriano.webp)"></div><span class="cap">Jack Vettriano, The Singing Butler · Museo J@M</span><p class="q">Il consulente commerciale J@M può proporre numerosi prodotti, suggerendo efficaci strategie di investimento.</p></div>
+  <div class="passioni-head" data-reveal><img class="occhiali bouncy" src="%(a)s/mascotte-occhiali.webp" width="444" height="363" alt=""><h2>Le nostre passioni</h2><p class="lede">Una gamma completa di servizi per la tua casa e per il tuo business. <b>Cinque passioni, un solo referente:</b> scegli quella che ti serve oggi, le altre restano a portata di telefono.</p></div>
+  <div class="curtain" id="curtain"><div class="curtain-art" style="background-image:url(%(i)s/art-vettriano.webp)"></div><span class="cap">Jack Vettriano, The Singing Butler · Museo J@M</span><p class="q">Il consulente J@M non vende un prodotto: legge la tua situazione e ti propone la strada migliore, in euro.</p></div>
   <div class="track" id="track" data-stagger>%(cards)s</div>
   <div class="track-nav"><button type="button" id="prevCard" aria-label="Scheda precedente"><svg><use href="#i-arrow-l"/></svg></button><button type="button" id="nextCard" aria-label="Scheda successiva"><svg><use href="#i-arrow"/></svg></button></div>
 </div></section>
+%(steps)s
+%(numbers)s
 
 <section class="pin isola" id="isola"><div class="stage">%(art_isola)s
   <div class="wrap">
@@ -365,38 +421,48 @@ HOME_BODY = """
     </div>
     <img class="isola-art" id="isolaArt" src="%(a)s/isola.webp" width="994" height="673" alt="L'isola di J@M: una ragazza in una conchiglia tra le palme, con due piccoli abitanti">
   </div>
-  <div class="sea"></div><span class="credit">M.C. Escher, Convesso e concavo · Museo J@M</span>
+  %(st_isola)s<div class="sea"></div><span class="credit">M.C. Escher, Convesso e concavo · Museo J@M</span>
 </div></section>
 
 <section id="mood">
-  <div class="mood-band">%(art_mood)s<div class="pattern"></div><h2>Mood</h2><span class="credit">Roy Lichtenstein · Museo J@M</span></div>
+  <div class="mood-band">%(art_mood)s<div class="pattern"></div>%(st_mood)s<h2>Mood</h2><span class="credit">Roy Lichtenstein · Museo J@M</span></div>
   <div class="tvh pad-s"><div class="wrap">
-    <div data-reveal><p class="eyebrow">J@M Mood</p><h2 class="mt">TV</h2><p class="lede mt">Tutto ciò che è J@M è online. Fatti prendere da J@M!</p><div class="mt2"><a class="btn btn-outline" href="%(b)s/jm-mood/tv/">tutti i video %(chev)s</a></div></div>
+    <div data-reveal><img src="%(i)s/ill-tv-logo.webp" width="220" alt="" style="width:clamp(140px,18vw,240px)" class="floaty"><p class="eyebrow">J@M Mood</p><h2 class="mt">TV</h2><p class="lede mt">Tutto ciò che è J@M è online. Fatti prendere da J@M!</p><div class="mt2"><a class="btn btn-outline" href="%(b)s/jm-mood/tv/">tutti i video %(chev)s</a></div></div>
     %(tv)s
   </div></div>
 </section>
 
-<section class="pad-s"><div class="wrap"><div class="museo-head" data-reveal><p class="eyebrow">J@M Mood</p><h2>Museo</h2><p class="lede">J@M è uno specchio di così tante personalità ed esperienze diverse che non potrà mai restare identica a sé stessa a lungo.</p><div class="ctas"><a class="btn btn-primary" href="%(b)s/jm-mood/museo/">fatti ispirare</a></div></div></div></section>
+<section class="pad-s museo-sec"><div class="wrap"><div class="museo-head" data-reveal><p class="eyebrow">J@M Mood</p><h2>Museo</h2><p class="lede">J@M è uno specchio di così tante personalità ed esperienze diverse che non potrà mai restare identica a sé stessa a lungo. <b>Ogni sede ospita un capolavoro reinterpretato con la nostra esploratrice dai capelli rossi:</b> Van Gogh a Milano, Botticelli a Cantù, Gauguin a Torino, Amano a Lecce…</p><div class="ctas"><a class="btn btn-primary" href="%(b)s/jm-mood/museo/">fatti ispirare</a></div></div></div>%(st_museo)s</section>
 %(wall)s
 
-<section class="art-band">%(art_comm)s<div class="veil"></div><div class="wrap"><p class="eyebrow">La nostra community</p><blockquote>Se nasce una nuova piattaforma, un nuovo modo di connettersi, noi vogliamo essere i primi a scoprirla… per questo siamo ovunque.</blockquote>%(socials)s</div><span class="credit">Sandro Botticelli, La primavera · Museo J@M</span></section>
+<section class="art-band">%(art_comm)s<div class="veil"></div><div class="wrap"><p class="eyebrow">La nostra community</p><blockquote>Se nasce una nuova piattaforma, un nuovo modo di connettersi, noi vogliamo essere i primi a scoprirla… per questo siamo ovunque.</blockquote><p class="lede">Seguici dove preferisci: raccontiamo l’isola ogni settimana.</p>%(socials)s</div>%(st_comm)s<span class="credit">Sandro Botticelli, La primavera · Museo J@M</span></section>
 %(ig)s
 
 <section class="art-band villaggi" id="villaggi">%(art_vill)s<div class="veil"></div><div class="wrap">
   <img class="villaggi-art" src="%(a)s/villaggi.webp" width="1000" height="1163" alt="Una ragazza pianta la bandiera J@M sulla cima di una montagna" data-float="30" data-reveal>
-  <div data-reveal><p class="eyebrow">I villaggi</p><h2 class="mt">Una rete di villaggi</h2><p class="lede mt">Virtuali e fisici. Per J@M non esistono vincoli territoriali o di possibilità e le sue basi strategiche sono avamposti sulla terra ferma. E brulicano di vita.</p><div class="ctas mt2"><a class="btn btn-primary" href="%(b)s/i-villaggi/"><svg><use href="#i-pin"/></svg> trovaci</a></div></div>
+  <div data-reveal><p class="eyebrow">I villaggi</p><h2 class="mt">Una rete di villaggi</h2><p class="lede mt">Virtuali e fisici. Per J@M non esistono vincoli territoriali o di possibilità e le sue basi strategiche sono avamposti sulla terra ferma. E brulicano di vita. <b>Milano, Cantù, Torino, Lecce, Bacău</b> e una rete di consulenti in tutta Italia.</p><div class="ctas mt2"><a class="btn btn-primary" href="%(b)s/i-villaggi/"><svg><use href="#i-pin"/></svg> trovaci</a><a class="link" href="%(b)s/lavora-con-noi/">diventa consulente %(chev)s</a></div><div class="sedi-row">%(sedi)s</div></div>
 </div><span class="credit">René Magritte, Golconda · Museo J@M</span></section>
-%(form)s
+%(faq)s
+<div class="contact-art">%(art_klimt)s<div class="veil"></div>%(form)s<span class="credit">Gustav Klimt, Il bacio · Museo J@M</span></div>
 %(lightbox)s
 """ % {"art": art("art-escher-giorno-notte"), "art_isola": art("art-escher-convesso", lit=False), "art_mood": art("art-lichtenstein", lit=False, zoom=False),
        "art_comm": art("art-botticelli"), "art_vill": art("art-magritte-golconda", lit=True, zoom=False), "b": BASE, "a": A, "i": IMG, "chev": chev,
-       "cards": passioni_cards(), "tv": tv_set("512464979"), "wall": museo_wall(MUSEO_WORKS[:14], "museo-parete"), "socials": SOCIALS, "ig": ig_band(), "form": form_section(), "lightbox": LIGHTBOX}
+       "steps": steps([("Ci mandi le bollette", "Basta una foto da WhatsApp. Un consulente legge consumi, fasce orarie e condizioni del contratto attuale.", "Tempo richiesto: 2 minuti"), ("Ricevi un confronto in euro", "Quanto paghi oggi, quanto pagheresti con la proposta J@M, quanto cambia in un anno. Se non conviene, te lo diciamo.", "Entro 1 giorno lavorativo"), ("Attiviamo e ti seguiamo", "Gestiamo noi la pratica con il fornitore e ti aggiorniamo a ogni passaggio. Se esce un’offerta migliore, sei il primo a saperlo.", "Nessuna interruzione della fornitura")], lede="Non devi capire il mercato dell’energia o della telefonia: lo facciamo noi e te lo spieghiamo in parole semplici."),
+       "numbers": numbers([("2001", "l’anno in cui l’isola è emersa"), ("5", "villaggi: Milano, Cantù, Torino, Lecce, Bacău"), ("34", "opere del Museo J@M, una per ogni sede"), ("1", "referente per tutti i tuoi contratti")]),
+       "faq": faq([("Cambiare fornitore di luce o gas ha un costo?", "No. Il cambio è gratuito, il contatore resta lo stesso e la fornitura non si interrompe mai. Cambia solo chi ti manda la bolletta e a quali condizioni."), ("La consulenza J@M si paga?", "No. Il consulente è retribuito dai fornitori partner, non da te. Se dal confronto emerge che la tua offerta attuale è già la migliore, te lo diciamo e finisce lì."), ("Che differenza c’è tra voltura, subentro e nuovo allaccio?", "Voltura: il contatore è attivo e cambia solo l’intestatario. Subentro: il contatore c’è ma è chiuso e va riattivato. Nuovo allaccio: il contatore non esiste ancora. In tutti e tre i casi prepariamo noi la pratica."), ("Il fotovoltaico conviene anche in condominio?", "Spesso sì, per le utenze comuni e, con la configurazione giusta, anche per le singole famiglie. Facciamo un sopralluogo, prepariamo il piano economico e lo presentiamo in assemblea insieme all’amministratore."), ("Seguite clienti fuori Milano?", "Sì. L’isola ha cinque villaggi e una rete di consulenti in tutta Italia; gran parte delle pratiche si gestisce a distanza.")]),
+       "st_hero": sticker("ill-tlc-pesci", "left:3%;bottom:16%;width:clamp(80px,10vw,150px)", 30, "I pesci connessi di J@M") + sticker("ill-abitanti-skate", "right:2%;bottom:12%;width:clamp(120px,15vw,230px)", 50, "Gli abitanti sullo skateboard"),
+       "st_mood": sticker("ill-mood-pittrice", "left:4%;bottom:-6%;width:clamp(120px,17vw,260px)", 30, "La ragazza J@M dipinge") + sticker("ill-mood-rec", "right:4%;top:0;width:clamp(120px,17vw,260px)", 50, "La ragazza J@M davanti alla telecamera"),
+       "st_museo": sticker("girl-kneeling", "right:6%;top:0;width:clamp(120px,16vw,240px)", 40, "La ragazza J@M presenta il Museo"),
+       "st_comm": sticker("ill-community-telefono", "right:3%;bottom:0;width:clamp(160px,22vw,340px)", 30, "La ragazza J@M esce dallo smartphone"),
+       "st_isola": sticker("ill-mettici-passione", "left:2%;top:12%;width:clamp(100px,14vw,220px);z-index:4", 40, "Mettici passione"),
+       "sedi": "".join('<a href="%s/i-villaggi/" title="%s"><img src="%s/%s.webp" loading="lazy" alt="La sede di %s"><span>%s</span></a>' % (BASE, c, IMG, f, c, c) for f, c in [("sede-milano", "Milano"), ("sede-cantu", "Cantù"), ("sede-torino", "Torino"), ("sede-lecce", "Lecce"), ("sede-bacau", "Bacău")]),
+       "art_klimt": art("art-klimt"), "cards": passioni_cards(), "tv": tv_set("512464979"), "wall": museo_wall(MUSEO_WORKS[:14], "museo-parete"), "socials": SOCIALS, "ig": ig_band(), "form": form_section(), "lightbox": LIGHTBOX}
 
 HOME_JS = """<script src="%s/home.js" defer></script>
 <script>document.addEventListener("DOMContentLoaded",function(){var t=document.getElementById("track");document.getElementById("prevCard").addEventListener("click",function(){t.scrollBy({left:-400,behavior:"smooth"})});document.getElementById("nextCard").addEventListener("click",function(){t.scrollBy({left:400,behavior:"smooth"})});});</script>""" % A
 
-page(BASE + "/", "J@M Passion - Consulenza professionale per imprese e privati",
-     "Un'intera gamma di servizi per la tua casa e il tuo business: telefonia, luce e gas, auto noleggio, efficientamento energetico e servizi web.",
+page(BASE + "/", "J@M Passion · Luce e gas, fotovoltaico, telefonia, noleggio auto e web con un solo consulente",
+     "Consulenza gratuita per casa, azienda e condominio a Milano e in tutta Italia, dal 2001: luce e gas, fotovoltaico ed efficientamento, telefonia, noleggio auto, servizi web. Testa, cuore e spirito d’iniziativa.",
      HOME_BODY, extra_css=HOME_CSS, extra_js=HOME_JS, og_image=A + "/isola.webp")
 
 # ================================================================ L'ISOLA
@@ -415,6 +481,7 @@ MANIFESTO_CSS = ".man p { color: var(--muted); font-size: clamp(1.1rem, 1.6vw, 1
 page(BASE + "/lisola/manifesto/", "Il manifesto J@M | Benvenuto intraprendente esploratore!",
      "Il manifesto di J@M: Darwin, il cambiamento e i pochi requisiti essenziali per vivere sull'isola: testa, cuore e spirito di iniziativa.",
      hero("art-escher-relativita", "Il manifesto", "Siamo nel 1859. Darwin, a seguito di lunghe esplorazioni intorno al mondo a bordo della nave Beagle, pubblica la sua teoria sull’evoluzione, in cui definisce, argomenta e verifica la tesi secondo cui le capacità di sopravvivenza di una specie sono definite dalla sua capacità di assimilare gradualmente una serie di piccoli cambiamenti positivi.", eyebrow="Benvenuto intraprendente esploratore", ill="ill-mettici-passione", ill_alt="La ragazza J@M con il cartello Mettici passione", credit="M.C. Escher, Relatività · Museo J@M", size="tall")
+     + feats([("In breve", "Chi siamo", "Un’agenzia di servizi nata a Milano nel 2001: energia, telefonia, noleggio auto, efficientamento e web, con una rete di consulenti in tutta Italia."), ("In breve", "Come lavoriamo", "Ogni cliente è un amico: lo ascoltiamo, gli proponiamo la strada migliore in euro e lo seguiamo anche dopo la firma."), ("In breve", "Cosa chiediamo", "Tre requisiti, a chi lavora con noi e a chi ci sceglie: testa, cuore e spirito di iniziativa.")], eyebrow="Il manifesto", title="In tre righe")
      + statement("È impossibile non rendersi conto di quanto il contenuto di questa citazione risulti ancora attuale. E così, non sulle incontaminate isole di allora ma nelle tecnologiche metropoli di oggi, vediamo ogni giorno quanto sia effettivamente il cambiamento a definire la capacità degli esseri viventi di adattarsi, progredire, crescere e garantirsi un futuro.", light="cambiamento|adattarsi|progredire|crescere")
      + """<section class="pad-s man"><div class="wrap narrow">
 <div class="blk" data-reveal><p class="eyebrow">Salpa</p><p>L’isola di J@M è emersa nel 2001 ed è un territorio protetto ed in continua espansione. La popolazione è in costante aumento e gli abitanti sono soggetti singolari, a volte bizzarri ma sempre disponibili e accoglienti.</p><div class="ctas"><a class="btn btn-outline" href="%(b)s/lisola/gli-abitanti/">scopri gli abitanti %(c)s</a></div></div>
@@ -431,7 +498,7 @@ page(BASE + "/lisola/storia-di-jm/", "La storia di J@M | Che lavoro fai?",
      "C'era una volta e oggi più che mai un'agenzia di servizi di nome J@M: la versione letterale e la favola.",
      hero("art-amano", "Che lavoro fai?", "Lavoro in un’agenzia di servizi, ci occupiamo di telefonia ed energia per aziende e per privati, siamo competitivi nelle offerte di autonoleggio e realizziamo siti web e applicazioni per i nostri clienti. <b>Questa è la versione letterale. E poi c’è la favola.</b>", eyebrow="Storia di J@M", ill="ill-isola-castello", ill_alt="La ragazza J@M davanti al castello dell'isola", credit="Yoshitaka Amano, Minitokyo · Museo J@M")
      + split("C'era una volta e oggi più che mai...", "<p>…un’agenzia di servizi di nome J@M. Una formazione compatta di professionisti cresciuti sull’onda della liberalizzazione di telefonia ed energia e che, interpretando o anticipando le mosse dei mercati, hanno costruito una community che condivide un solido ed incrollabile pensiero: <b style=\"color:var(--paper)\">i clienti sono carissimi amici.</b></p><p>Un amico va ascoltato, compreso, non va mai lasciato solo. È questo l’impegno che prendiamo nei suoi confronti perché, come un buon amico, continui a scegliere noi e tutta la gamma dei servizi che proponiamo.</p>", "ill-storia-mongolfiera", "La mongolfiera 'Amici carissimi' di J@M", ctas='<a class="btn btn-primary" href="%s/lisola/manifesto/">leggi il manifesto di J@M</a>' % BASE)
-     + statement("Ogni cliente è un grandissimo amico", light="amico", eyebrow="Rosso passione, rosso J@M")
+     + art_band("art-van-gogh", "Ogni cliente è un grandissimo amico.", credit="Vincent van Gogh, Notte stellata · Museo J@M", eyebrow="Rosso passione, rosso J@M")
      + split("Servizi web", "<p>È per questo che ci impegniamo nel curare la sua comunicazione con servizi web innovativi e App personalizzate, con campagne marketing che ottimizzino la sua visibilità tramite accorgimenti e analisi a partire dal posizionamento SEO.</p>", "ill-storia-web", "Le app e i social di J@M", rev=True, compact=True, ctas='<a class="btn btn-outline" href="%s/passioni/servizi-web/">servizi web %s</a>' % (BASE, chev))
      + split("Telefonia", "<p>È per questo che accompagniamo i nostri amici nella sostituzione di tecnologie obsolete per ottenere, grazie alla fibra o al 5G, le migliori prestazioni in vista dell’avvento dell’Internet Of Things.</p>", "ill-storia-telefonia", "La cabina telefonica J@M", compact=True, ctas='<a class="btn btn-outline" href="%s/passioni/telecomunicazioni/">telefonia %s</a>' % (BASE, chev))
      + split("Energia", "<p>È per questo che per luce e gas ci impegniamo a far godere i nostri clienti di sensibili risparmi con la sottoscrizione di contratti dinamici che variano al variare del prezzo delle materie prime, puntando sempre ad ottenere il massimo vantaggio.</p>", "ill-storia-energia", "La lampadina neon Passion", rev=True, compact=True, ctas='<a class="btn btn-outline" href="%s/passioni/energia/">energia %s</a>' % (BASE, chev))
@@ -447,6 +514,7 @@ page(BASE + "/lisola/gli-abitanti/", "Gli abitanti dell'isola di J@M | Personali
      hero("art-southpark", "Gli abitanti", "“J@M è uno specchio di così tante personalità ed esperienze diverse che non potrà mai restare identica a se stessa a lungo”.", eyebrow="L’isola", ill="ill-abitanti-cassetta", ill_alt="La ragazza J@M alla cassetta delle lettere", credit="South Park · Museo J@M")
      + split("Avventurieri ed esploratori", "<p>Devi sapere che avventurieri ed esploratori non mancano di certo, in questa eclettica realtà che è J@M. Sono stati proprio quelli più impavidi a dare origine a tutto quello che siamo oggi ed a guidare questa loro grande squadra alla scoperta del mondo del business.</p>", "ill-abitanti-nave", "La ragazza J@M al timone")
      + split("Con coraggio", "<p>Con coraggio, abbiamo timonato in direzione di isole precluse ai timorosi, verso le quali ci siamo diretti con vele gonfie di entusiasmo, tra correnti contrastanti di ragione e azzardo, per sbarcare infine come pionieri.</p>", "ill-nave-pirata", "La nave di J@M", rev=True)
+     + art_band("art-miro", "Tra correnti contrastanti di ragione e azzardo, per sbarcare infine come pionieri.", credit="Joan Miró, Il carnevale di Arlecchino · Museo J@M", eyebrow="Gli abitanti")
      + split("Viaggiatori inarrestabili", "<p>Viaggiatori inarrestabili e appassionati, animati dalla giusta dose di follia e di propensione al mutamento. <b style=\"color:var(--paper)\">In una parola: siamo J@M!</b></p>", "ill-abitanti-danza", "La ragazza J@M che danza tra le stelle")
      + cta_band("Vuoi essere uno dei nostri?", "scopri come", BASE + "/lavora-con-noi/"), og_image=IMG + "/ill-abitanti-nave.webp")
 
@@ -463,29 +531,30 @@ page(BASE + "/lisola/amici-partner/", "Amici e partner | Gli elementi fondamenta
 # ================================================================ LAVORA CON NOI
 page(BASE + "/lavora-con-noi/", "Lavora con noi | Hai abbastanza carattere?",
      "J@M è insolita: solida come un'industria, visionaria come una startup. Requisiti: testa, cuore e spirito d'iniziativa.",
-     hero("art-escher-giorno-notte", "Lavora con noi", "J@M è insolita. È la migliore disorganizzazione perfettamente organizzata. È solida come un’industria ma visionaria come una startup. È un’isola creativa, è sperimentale, è una scommessa.", eyebrow="Salpa verso l’isola", ill="ill-giostra", ill_alt="La giostra di J@M", credit="M.C. Escher, Giorno e notte · Museo J@M")
+     hero("art-warhol", "Lavora con noi", "J@M è insolita. È la migliore disorganizzazione perfettamente organizzata. È solida come un’industria ma visionaria come una startup. È un’isola creativa, è sperimentale, è una scommessa.", eyebrow="Salpa verso l’isola", ill="ill-giostra", ill_alt="La giostra di J@M", credit="Andy Warhol, Marilyn · Museo J@M")
      + statement("Ogni abitante della nostra isola può emergere grazie a dinamismo, passione e originalità. Qui le opportunità sono tante e i requisiti sono pochi ma, attenzione, veramente essenziali: testa, cuore e spirito d’iniziativa.", light="dinamismo|passione|originalità|testa|cuore|spirito|d’iniziativa", sub="Ma c’è una cosa importantissima: non considerare mai una gara scontata, ci dev’essere sempre un fuoco che ti accenda.")
+     + feats([("Cosa trovi sull’isola", "Formazione e affiancamento", "Formazione iniziale e affiancamento sul campo con i consulenti senior."), ("Cosa trovi sull’isola", "Cinque passioni da proporre", "Energia, fotovoltaico, telefonia, noleggio auto e web: un portafoglio completo per i tuoi clienti."), ("Cosa trovi sull’isola", "Strumenti di lavoro", "Gestionale per caricare le pratiche e seguirle in tempo reale, materiali e listini sempre aggiornati."), ("Cosa trovi sull’isola", "Provvigioni e bonus", "Piano provvigionale chiaro con bonus sugli obiettivi mensili.")])
      + form_section("Hai abbastanza carattere?", "Dimostracelo e candidati!", subject="Candidatura dal sito J@M", msg_label="Lettera di presentazione (opzionale) — allega il CV alla mail che si aprirà", button="candidati", phone=False), og_image=IMG + "/ill-giostra.webp")
 
 # ================================================================ PASSIONI
 PASS_CSS = ".pass-list .split .ill { width: min(100%, 520px); }"
 page(BASE + "/passioni/", "Le nostre passioni | Un'intera gamma di servizi per la casa e per il business",
      "J@M è un'azienda consolidata, eclettica e piena di iniziativa: telecomunicazioni, energia, servizi web, efficientamento energetico, noleggio auto.",
-     hero("art-vettriano", "Le nostre passioni", "J@M è un’azienda consolidata, eclettica e piena di iniziativa, che si occupa di consulenza professionale per aziende e privati. Dedichiamo una particolare attenzione alla cura e alla fidelizzazione del cliente e lo facciamo grazie ad una eccezionale rete vendita, fidata e motivata.", eyebrow="Passioni", credit="Jack Vettriano, The Singing Butler · Museo J@M", size="tall")
+     hero("art-vettriano", "Le nostre passioni", ill="ill-storia-neon", ill_alt="L’insegna al neon Passion", lede="J@M è un’azienda consolidata, eclettica e piena di iniziativa, che si occupa di consulenza professionale per aziende e privati. Dedichiamo una particolare attenzione alla cura e alla fidelizzazione del cliente e lo facciamo grazie ad una eccezionale rete vendita, fidata e motivata.", eyebrow="Passioni", credit="Jack Vettriano, The Singing Butler · Museo J@M", size="tall")
      + statement("Il consulente commerciale J@M può proporre numerosi prodotti, suggerendo efficaci strategie di investimento: siti Web, Seo, App, auto a noleggio, telefonia, energia verde e molto altro.", light="siti|seo|app|auto|telefonia|energia", sub="La molteplicità delle sue specializzazioni arricchisce il suo valore ed apre al cliente uno stimolante ventaglio di possibilità.")
      + '<div class="pass-list">'
-     + split("Telecomunicazioni", "<p>Proponiamo le migliori soluzioni e offerte di telefonia mobile e fissa per il tuo business e le personalizziamo a seconda delle tue esigenze. Chiami, messaggi e navighi senza limiti con la massima velocità, che tu sia in ufficio, fuori casa o in fondo al mare.</p>", "ill-tlc-alexa", "La ragazza J@M in ufficio con gli smart object", eyebrow="Passione 01", ctas='<a class="btn btn-primary" href="%s/passioni/telecomunicazioni/">scopri</a>' % BASE, compact=True)
-     + split("Energia", "<p>Con energia e passione ti proponiamo soluzioni di fornitura luce e gas competitive da far paura. Progettiamo offerte innovative di energia verde e sostenibile, proveniente da fonti rinnovabili e a basso impatto ambientale.</p>", "ill-energia-malefica", "La ragazza J@M con la fata del bosco", rev=True, eyebrow="Passione 02", ctas='<a class="btn btn-primary" href="%s/passioni/energia/">scopri</a>' % BASE, compact=True)
-     + split("Servizi web", "<p>Offriamo supporto e consulenza professionale in campo digitale. Come? Creiamo siti web e app ottimizzati in ottica SEO per scalare i motori di ricerca. Progettiamo campagne di digital marketing e ti aiutiamo ad accrescere il tuo business utilizzando il potere dei social media!</p>", "ill-web-alice", "La ragazza J@M nel paese delle meraviglie digitale", eyebrow="Passione 04", ctas='<a class="btn btn-primary" href="%s/passioni/servizi-web/">scopri</a>' % BASE, compact=True)
-     + split("Efficientamento energetico", "<p>Offriamo consulenza e supporto per migliorare le prestazioni energetiche del tuo immobile grazie all’accesso ai bonus attivi. Superbonus, ecobonus, fotovoltaico e tanto altro per farti dire addio agli spifferi e ai ponti termici.</p>", "ill-eff-frozen-casa", "La casa con i pannelli solari", rev=True, eyebrow="Passione 05", ctas='<a class="btn btn-primary" href="%s/passioni/efficientamento-energetico/">scopri</a>' % BASE, compact=True)
-     + split("Auto noleggio", "<p>Promuoviamo la mobilità sostenibile attraverso i nostri servizi di noleggio auto a medio e a lungo termine. Progettiamo soluzioni all-inclusive per semplificarti la vita e liberarti dalla burocrazia. Perché? Perché guidare deve essere un piacere!</p>", "ill-auto-tappeto", "L'auto volante di J@M", eyebrow="Passione 03", ctas='<a class="btn btn-primary" href="%s/passioni/noleggio-auto/">scopri</a>' % BASE, compact=True)
+     + split("Telecomunicazioni", "<p>Proponiamo le migliori soluzioni e offerte di telefonia mobile e fissa per il tuo business e le personalizziamo a seconda delle tue esigenze. Chiami, messaggi e navighi senza limiti con la massima velocità, che tu sia in ufficio, fuori casa o in fondo al mare.</p>", "ill-tlc-alexa", "La ragazza J@M in ufficio con gli smart object", eyebrow="Passione 01", ctas='<a class="btn btn-primary" href="%s/passioni/telecomunicazioni/">richiedi un’offerta</a>' % BASE, compact=True)
+     + split("Energia", "<p>Con energia e passione ti proponiamo soluzioni di fornitura luce e gas competitive da far paura. Progettiamo offerte innovative di energia verde e sostenibile, proveniente da fonti rinnovabili e a basso impatto ambientale.</p>", "ill-energia-malefica", "La ragazza J@M con la fata del bosco", rev=True, eyebrow="Passione 02", ctas='<a class="btn btn-primary" href="%s/passioni/energia/">confronta la bolletta</a>' % BASE, compact=True)
+     + split("Servizi web", "<p>Offriamo supporto e consulenza professionale in campo digitale. Come? Creiamo siti web e app ottimizzati in ottica SEO per scalare i motori di ricerca. Progettiamo campagne di digital marketing e ti aiutiamo ad accrescere il tuo business utilizzando il potere dei social media!</p>", "ill-web-alice", "La ragazza J@M nel paese delle meraviglie digitale", eyebrow="Passione 04", ctas='<a class="btn btn-primary" href="%s/passioni/servizi-web/">raccontaci il progetto</a>' % BASE, compact=True)
+     + split("Efficientamento energetico", "<p>Offriamo consulenza e supporto per migliorare le prestazioni energetiche del tuo immobile grazie all’accesso ai bonus attivi. Ecobonus, fotovoltaico, pompe di calore e colonnine con gli incentivi in vigore, calcolati nel preventivo, per farti dire addio agli spifferi e ai ponti termici.</p>", "ill-eff-frozen-casa", "La casa con i pannelli solari", rev=True, eyebrow="Passione 05", ctas='<a class="btn btn-primary" href="%s/passioni/efficientamento-energetico/">prenota un sopralluogo</a>' % BASE, compact=True)
+     + split("Auto noleggio", "<p>Promuoviamo la mobilità sostenibile attraverso i nostri servizi di noleggio auto a medio e a lungo termine. Progettiamo soluzioni all-inclusive per semplificarti la vita e liberarti dalla burocrazia. Perché? Perché guidare deve essere un piacere!</p>", "ill-auto-tappeto", "L'auto volante di J@M", eyebrow="Passione 03", ctas='<a class="btn btn-primary" href="%s/passioni/noleggio-auto/">chiedi un preventivo</a>' % BASE, compact=True)
      + '</div>'
      + statement("Questo è quello che facciamo. Ma non basta a descriverci, non c’è un modo di definire J@M, c’è un mondo a definire J@M.", light="mondo|j@m") + form_section(), extra_css=PASS_CSS, og_image=IMG + "/art-vettriano.webp")
 
 # ================================================================ TELECOMUNICAZIONI
 page(BASE + "/passioni/telecomunicazioni/", "Telecomunicazioni | Piani telefonia e internet per il tuo business",
      "Fibra FTTH, 5G, Internet of Things e soluzioni business personalizzate: le telecomunicazioni secondo J@M.",
-     hero("art-escher-giorno-notte", "Ma per chi mi hai presa?!", "Non è una conchiglia… <b>È uno smart object…</b>", eyebrow="Telecomunicazioni", ill="ill-tlc-conchiglia", ill_alt="La sirena J@M con la conchiglia", ctas='<a class="btn btn-primary" href="#soluzioni">le nostre soluzioni business</a>', credit="M.C. Escher, Giorno e notte · Museo J@M")
+     hero("art-hokusai", "Ma per chi mi hai presa?!", "Non è una conchiglia… <b>È uno smart object…</b> Fibra FTTH, 5G, mobile, centralini e oggetti connessi: soluzioni su misura per la tua azienda, con un referente che risponde.", eyebrow="Telecomunicazioni", ill="ill-tlc-conchiglia", ill_alt="La sirena J@M con la conchiglia", ctas='<a class="btn btn-primary" href="#soluzioni">le nostre soluzioni business</a>', credit="Hokusai, La grande onda · Museo J@M")
      + split("L'innovazione è intorno a noi", "<p>Il mondo è sempre più veloce e l’innovazione digitale e tecnologica ci fa scorgere un futuro sempre più ibrido in cui realtà virtuale e fisica si incontrano senza soluzione di continuità.</p><p>Prima controllare elettrodomestici con la voce sembrava fantascienza, oggi si chiama Internet of Things (Internet delle cose o IoT), quegli oggetti intelligenti si chiamano Smart Objects e sono sempre più numerosi e ovunque.</p>", "ill-tlc-alexa", "La ragazza J@M parla con l'assistente vocale")
      + split("È questione di connessioni", "<p>Nelle case, negli uffici, nelle città: l’integrazione digitale degli oggetti di uso comune diventa sempre più importante, mettendo in evidenza le innumerevoli possibilità di sostenibilità economica e ambientale.</p><p>Per abbracciare questo futuro con la migliore efficienza ti forniamo connessioni wifi sempre più veloci, efficienti e convenienti. Miglioriamo la tua copertura grazie all’utilizzo della banda larga, della fibra con tecnologia FTTH e delle ultime innovazioni tecnologiche permesse dalla rete 5G, quest’ultima sempre più diffusa sul territorio.</p>", "ill-tlc-pesci", "I pesci connessi di J@M", rev=True)
      + split("Ogni cliente è diverso", "<p>Perciò ogni soluzione non può che essere personalizzata a seconda delle specifiche esigenze di ogni azienda.</p>", "ill-tlc-sirena", "La sirena J@M", compact=True)
@@ -500,7 +569,7 @@ page(BASE + "/passioni/telecomunicazioni/", "Telecomunicazioni | Piani telefonia
 # ================================================================ ENERGIA
 page(BASE + "/passioni/energia/", "Forniture luce e gas | Con J@M scegli energia verde e sostenibile!",
      "Offerte luce e gas per qualsiasi tipologia di cliente, energia 100% verde certificata, nuove attivazioni, volture, subentri e allacci.",
-     hero("art-yerka", "È perché non hai mai usato energia così pura.", "", eyebrow="Energia", ill="ill-energia-malefica", ill_alt="La ragazza J@M e la fata della foresta", ctas='<a class="btn btn-primary" href="#sostenibile">energia sostenibile</a><a class="btn btn-outline" href="#servizi">servizi</a>', credit="Jacek Yerka, By the waters · Museo J@M")
+     hero("art-yerka", "È perché non hai mai usato energia così pura.", "<b>Mandaci una bolletta:</b> la confrontiamo con le offerte aggiornate e ti diciamo in euro cosa cambia. Energia verde certificata, pratica seguita fino alla fine.", eyebrow="Energia", ill="ill-energia-malefica", ill_alt="La ragazza J@M e la fata della foresta", ctas='<a class="btn btn-primary" href="#sostenibile">energia sostenibile</a><a class="btn btn-outline" href="#servizi">servizi</a>', credit="Jacek Yerka, By the waters · Museo J@M")
      + split("Offriamo piani di fornitura energetica", "<p>Attraverso le offerte luce e gas più convenienti ed aggiornate per qualsiasi tipologia di cliente.</p><p>Personalizziamo ogni soluzione energetica in relazione allo specifico target di consumo e seguiamo la tua pratica costantemente in modo da tenerti sempre aggiornato riguardo ogni ribasso del mercato. Se c’è una novità più conveniente sei sempre il primo a saperlo.</p>", "ill-energia-orologio", "La mascotte J@M con l'orologio da taschino")
      + split("Energia sostenibile", "<p>Smettere d’inquinare non significa utilizzare meno energia ma utilizzare energia migliore e conoscere l’impatto del proprio stile di vita.</p><p>Perché? Perché le risorse del pianeta sono sempre meno e l’inquinamento è sempre maggiore: tutto ciò a ritmi record. Ma il cambiamento è iniziato.</p><p>Distributori coraggiosi, come i nostri amici di Controcorrente Gas e Luce, hanno scelto di offrire ai propri clienti solo energia verde e certificata, 100% naturale e proveniente da fonti rinnovabili come l’eolico, il fotovoltaico, il geotermico e l’idroelettrico.</p>", "ill-energia-eolico", "La ragazza J@M tra le pale eoliche", rev=True, ident="sostenibile")
      + split("Perché progresso significa semplicità", "<p>Per passare all’energia verde non devi cambiare i tuoi elettrodomestici o la tecnologia degli impianti. E il contatore? Neanche quello.</p><p>Se ti stai chiedendo cosa cambi la risposta è semplice. L’energia elettrica è la stessa ma il suo percorso è molto più bello perché ha origine dalla natura: niente più carbone, niente più combustibili fossili. In compenso respiri aria molto più pulita, specialmente perché un’azienda inquina in media più di un’abitazione.</p>", "ill-energia-barca", "La barca di J@M nella foresta", compact=True)
@@ -512,7 +581,7 @@ page(BASE + "/passioni/energia/", "Forniture luce e gas | Con J@M scegli energia
 # ================================================================ NOLEGGIO AUTO
 page(BASE + "/passioni/noleggio-auto/", "Noleggio auto a medio e lungo termine | Così magico che non sembra vero",
      "Noleggio auto a medio e lungo termine con tutte le spese incluse, anche elettrico: guida senza pensare alla burocrazia.",
-     hero("art-magritte-golconda", "“Così magico che non sembra vero.”", "cit. Chiunque provi la semplicità dei nostri servizi di noleggio auto.", eyebrow="Auto noleggio", ill="ill-auto-tappeto", ill_alt="L'auto volante di J@M", credit="René Magritte, Golconda · Museo J@M")
+     hero("art-piero", "“Così magico che non sembra vero.”", "cit. Chiunque provi la semplicità dei nostri servizi di noleggio auto. <b>Un canone, tutto incluso:</b> assicurazione, manutenzione, bollo. Anche elettrico.", eyebrow="Auto noleggio", ill="ill-auto-tappeto", ill_alt="L'auto volante di J@M", credit="Piero della Francesca, La città ideale · Museo J@M")
      + split("Crea le tue nuove certezze e guida verso il futuro", "<p>Grazie ai nostri servizi di auto noleggio a medio o a lungo termine puoi goderti il piacere della guida senza pensare alla burocrazia. Come? Scegliendo un pacchetto unico con tutte le spese incluse.</p>", "ill-auto-aladdin", "La ragazza J@M con l'auto rossa")
      + split("Mobilità sostenibile", "<p>Scopri la guida senza emissioni a bordo delle nostre auto elettriche a noleggio. Può essere l’occasione per decidere di testarla e comprarne una in futuro!</p>", "ill-auto-lampada", "La ragazza J@M con la lampada magica", rev=True)
      + feats([("Vantaggi", "Costi di ricarica ridotti", '<a class="link" href="%s/passioni/efficientamento-energetico/#colonnine">bonus colonnine elettriche %s</a>' % (BASE, chev)), ("Vantaggi", "Esenzione bollo auto", "per cinque anni"), ("Vantaggi", "Copertura assicurativa", "scontata del 50%"), ("Vantaggi", "Accesso alle ZTL", ""), ("Vantaggi", "Parcheggio gratuito", "in tantissime città italiane!"), ("Vantaggi", "Detrazione fiscale", "Per l’acquisto e l’installazione delle colonnine di ricarica rapida.")], eyebrow="Elettrico", title="I vantaggi")
@@ -523,7 +592,7 @@ page(BASE + "/passioni/noleggio-auto/", "Noleggio auto a medio e lungo termine |
 # ================================================================ SERVIZI WEB
 page(BASE + "/passioni/servizi-web/", "Servizi web | Web design, digital marketing e social media",
      "Siti web, SEO, campagne Google Ads, social advertising, contenuti e copywriting: il web secondo J@M, insieme agli amici di PagineWeb.",
-     hero("art-lichtenstein", "Il web è pieno di matti", "Devi esserlo anche tu… Altrimenti non saresti qui!", eyebrow="Servizi web", ill="ill-web-alice", ill_alt="La ragazza J@M nel paese delle meraviglie digitale", ctas='<a class="btn btn-primary" href="#webdesign">web design</a><a class="btn btn-outline" href="#digitalmarketing">digital marketing</a><a class="btn btn-outline" href="#socialmedia">social media</a>', credit="Roy Lichtenstein · Museo J@M")
+     hero("art-lichtenstein", "Il web è pieno di matti", "Devi esserlo anche tu… Altrimenti non saresti qui! <b>Siti, SEO, social e campagne</b> per farti trovare da chi ti cerca: parliamo di clienti, non di tecnicismi.", eyebrow="Servizi web", ill="ill-web-alice", ill_alt="La ragazza J@M nel paese delle meraviglie digitale", ctas='<a class="btn btn-primary" href="#webdesign">web design</a><a class="btn btn-outline" href="#digitalmarketing">digital marketing</a><a class="btn btn-outline" href="#socialmedia">social media</a>', credit="Roy Lichtenstein · Museo J@M")
      + split("Rilassati", "<p>Siamo qui proprio per farti arrivare primo!</p>", "ill-web-relax", "La ragazza J@M dice Relax", compact=True)
      + split("Metti in scena il tuo business", "<p>Oggi essere online è indispensabile ma lo è anche il modo in cui ci presentiamo. Valorizzare un’azienda online è, per noi, come lavorare nel backstage di un teatro. Ci appassiona conoscere la trama della narrazione e quali attori sono coinvolti in modo che l’esibizione sia fantastica ed indimenticabile per il pubblico.</p><p>Come facciamo? Utilizziamo i migliori strumenti digitali per far spiccare il volo a tutte le tue piattaforme e farti avere la massima visibilità online.</p>", "ill-web-sipario", "Lo Stregatto sul sipario", rev=True)
      + feats([("Web design", "Realizzazione", "Progettazione e costruzione di siti web per il tuo business (vetrine, portfolio, e-commerce…)"), ("Web design", "Usabilità", "Progettazione dell’esperienza utente in modalità responsive (desktop, tablet, mobile) per una corretta visualizzazione su tutti i dispositivi"), ("Web design", "Mantenimento", "Implementazione e aggiornamento del tuo sito web già esistente"), ("Web design", "Ottimizzazione", "Ottimizzazione del tuo sito web per una corretta visualizzazione su tutti i browser (Chrome, Safari, Firefox, Edge etc.)")], eyebrow="Web", title="Design", ident="webdesign")
@@ -534,9 +603,9 @@ page(BASE + "/passioni/servizi-web/", "Servizi web | Web design, digital marketi
      + form_section(msg_label="Hai una richiesta in particolare? (facoltativo)", subject="Richiesta servizi web dal sito J@M"), og_image=IMG + "/ill-web-alice.webp")
 
 # ================================================================ EFFICIENTAMENTO
-page(BASE + "/passioni/efficientamento-energetico/", "Gli ecobonus | Aumenta l'efficienza energetica del tuo immobile con J@M",
+page(BASE + "/passioni/efficientamento-energetico/", "Fotovoltaico ed efficientamento energetico | Incentivi in vigore, sopralluogo gratuito",
      "Sostituzione caldaia e climatizzatore, fotovoltaico, colonnine elettriche, cappotto e infissi: efficientamento energetico con J@M.",
-     hero("art-escher-convesso", "Almeno non sei freddolosa. Ne riparleremo d’estate!", "", eyebrow="Efficientamento energetico", ill="ill-eff-frozen-casa", ill_alt="La casa efficiente con i pannelli solari", credit="M.C. Escher, Convesso e concavo · Museo J@M")
+     hero("art-van-gogh", "Almeno non sei freddolosa. Ne riparleremo d’estate!", "<b>Fotovoltaico, pompe di calore, colonnine, cappotto e infissi</b> con gli incentivi in vigore: sopralluogo gratuito, incentivi già calcolati nel preventivo, pratiche gestite da noi.", eyebrow="Efficientamento energetico", ill="ill-eff-frozen-casa", ill_alt="La casa efficiente con i pannelli solari", credit="Vincent van Gogh, Notte stellata · Museo J@M")
      + split("Sostituzione caldaia", "<p>Sostituisci la tua caldaia con un impianto ibrido o full electric. Puoi ottenere fino al 50% sulla prima casa e il 36% sulla seconda.</p><p><b style=\"color:var(--paper)\">Detrai fino al 50% dell'importo.</b></p>", "ill-eff-caldaia", "La caldaia con le mascotte", eyebrow="Per privati · Ecobonus fino al 50%", ctas='<a class="btn btn-primary" href="#contatti">contattaci</a>')
      + feats([("Come interveniamo?", "Progettazione", "Con i migliori professionisti del settore e utilizziamo le migliori tecnologie leader di mercato: le più affidabili e con le migliori prestazioni."), ("", "Installazione", ""), ("", "Collaudo", ""), ("", "Smaltimento", "")])
      + split("Sostituzione climatizzatore", "<p>Rinnova il clima della tua casa con il minimo sforzo. Sostituisci il tuo vecchio climatizzatore ed installa un nuovo modello a pompa di calore e ad alta efficienza energetica!</p><p>Grazie alle migliori prestazioni del tuo impianto di climatizzazione potrai soddisfare i nuovi requisiti di efficientamento e accedere immediatamente ad uno sconto fino al 50% sul totale dei costi dell’intervento: progettazione, realizzazione, installazione, smaltimento.</p>", "ill-eff-clima", "Il climatizzatore installato", rev=True, eyebrow="Per privati · Ecobonus fino al 50%", ctas='<a class="btn btn-primary" href="#contatti">contattaci</a>')
@@ -551,7 +620,7 @@ page(BASE + "/passioni/efficientamento-energetico/", "Gli ecobonus | Aumenta l'e
 # ================================================================ J@M MOOD
 page(BASE + "/jm-mood/", "J@M Mood | Le etichette sono per i prodotti, non per le persone",
      "TV, Museo, Community e J@M Session: il mood di J@M.",
-     hero("art-lichtenstein", "Mood", "Le etichette sono per i prodotti, non per le persone.", eyebrow="J@M Mood", ill="ill-mood-pittrice", ill_alt="La ragazza J@M dipinge", credit="Roy Lichtenstein · Museo J@M")
+     hero("art-lichtenstein", "Mood", "Le etichette sono per i prodotti, non per le persone.", eyebrow="J@M Mood", ill="ill-mood-rec", ill_alt="La ragazza J@M dipinge", credit="Roy Lichtenstein · Museo J@M")
      + split("TV", "<p>Tutto ciò che è J@M è online. Fatti prendere da J@M!</p>", "ill-mood-rec", "La ragazza J@M davanti alla telecamera", ctas='<a class="btn btn-primary" href="%s/jm-mood/tv/">buona visione</a>' % BASE)
      + split("Museo", "<p>Il fascino dell’ignoto, il gusto della scoperta che solo una realtà sempre uguale e sempre diversa come J@M ti può dare.</p>", "ill-mood-pittrice", "La ragazza J@M davanti al cavalletto", rev=True, ctas='<a class="btn btn-primary" href="%s/jm-mood/museo/">tutte le opere</a>' % BASE)
      + split("Community", "<p>Se nasce una nuova piattaforma, un nuovo modo di connettersi, noi vogliamo essere i primi a scoprirla… per questo siamo ovunque.</p>", "ill-community-telefono", "La ragazza J@M esce dallo smartphone", ctas='<a class="btn btn-primary" href="%s/jm-mood/community/">villaggi virtuali</a>' % BASE)
@@ -561,7 +630,7 @@ page(BASE + "/jm-mood/", "J@M Mood | Le etichette sono per i prodotti, non per l
 TV_IDS = ["117800499", "512473622", "185233391", "1179828843", "1103047986", "896813618", "77122095", "77122208", "77129210", "77130633", "232316666", "118795260", "512473962"]
 page(BASE + "/jm-mood/tv/", "J@M TV | Tutti i video",
      "Tutti immortalati nei momenti più belli e più improbabili: i video di J@M.",
-     hero("art-lichtenstein", "TV", "Tutti immortalati nei momenti più belli e più improbabili. Stili di vita, visioni, prospettive, personalità. Tutto al plurale. Non ci piace semplificarci e descriverci in poche righe.", eyebrow="J@M Mood", credit="Roy Lichtenstein · Museo J@M", size="short")
+     hero("art-hopper", "TV", ill="ill-tv-logo", ill_alt="TV J@M", lede="Tutti immortalati nei momenti più belli e più improbabili. Stili di vita, visioni, prospettive, personalità. Tutto al plurale. Non ci piace semplificarci e descriverci in poche righe.", eyebrow="J@M Mood", credit="Edward Hopper, I nottambuli · Museo J@M", size="short")
      + '<section class="pad-s"><div class="wrap">' + tv_set("512464979") + '</div></section>'
      + videos(TV_IDS, eyebrow="Lasciati ispirare", title="Fatti prendere da J@M")
      + """<section class="pad-s"><div class="wrap"><div class="feats" data-stagger>
@@ -575,7 +644,7 @@ page(BASE + "/jm-mood/tv/", "J@M TV | Tutti i video",
 # ================================================================ MUSEO
 page(BASE + "/jm-mood/museo/", "Museo J@M | Il fascino dell'ignoto, il gusto della scoperta",
      "Le opere del Museo J@M: capolavori reinterpretati con la ragazza dai capelli rossi, appesi nelle sedi di Milano, Cantù, Torino, Lecce, Bologna, Roma, Verona e Padova.",
-     hero("art-escher-relativita", "Museo", "Il fascino dell’ignoto, il gusto della scoperta che solo una realtà sempre uguale e sempre diversa come J@M ti può dare.", eyebrow="J@M Mood", credit="M.C. Escher, Relatività · Museo J@M", size="short")
+     hero("art-escher-relativita", "Museo", ill="girl-kneeling", ill_alt="La ragazza J@M presenta il Museo", lede="Il fascino dell’ignoto, il gusto della scoperta che solo una realtà sempre uguale e sempre diversa come J@M ti può dare.", eyebrow="J@M Mood", credit="M.C. Escher, Relatività · Museo J@M", size="short")
      + statement("J@M è insolita. J@M è creativa. Un’inguaribile romantica. Quando riesci a descriverla è già diventata qualcos’altro. Cammina ad occhi chiusi, sogna ad occhi aperti.", light="insolita|creativa|romantica|sogna", sub="“Quest’opera non l’ho mai capita fino in fondo. Esattamente come J@M.”")
      + museo_grid(MUSEO_WORKS) + LIGHTBOX
      + cta_band("Fatti prendere da J@M", "vuoi chiederci qualcosa?", BASE + "/#contatti"), og_image=MUSEO + "/11-van-gogh-notte-stellata150x1185cm.webp")
@@ -584,7 +653,7 @@ page(BASE + "/jm-mood/museo/", "Museo J@M | Il fascino dell'ignoto, il gusto del
 page(BASE + "/jm-mood/community/", "Community J@M | Siamo ovunque",
      "Quando nasce una nuova piattaforma, noi vogliamo essere i primi a scoprirla. Per questo siamo ovunque.",
      hero("art-botticelli", "Community", "Quando nasce una nuova piattaforma, un nuovo modo di connettersi, noi vogliamo essere i primi a scoprirla e ci piace esserci e sperimentare, sporcarci le mani e assorbire conoscenza e ispirazione da tutto ciò che è inedito e incredibile.", eyebrow="J@M Mood", ill="ill-community-telefono", ill_alt="La ragazza J@M esce dallo smartphone", credit="Sandro Botticelli, La primavera · Museo J@M")
-     + statement("Per questo siamo ovunque.", light="ovunque") + '<section class="pad-s"><div class="wrap">' + SOCIALS + '</div></section>' + ig_band() + form_section(), og_image=IMG + "/ill-community-telefono.webp")
+     + art_band("art-caravaggio", "Per questo siamo ovunque.", credit="Caravaggio, I bari · Museo J@M", eyebrow="Community") + '<section class="pad-s"><div class="wrap">' + SOCIALS + '</div></section>' + ig_band() + form_section(), og_image=IMG + "/ill-community-telefono.webp")
 
 # ================================================================ SESSION
 def tl(items):
@@ -596,6 +665,7 @@ page(BASE + "/jm-mood/jm-session/", "J@M Session | Le convention di J@M nel mond
      "Amiamo la condivisione: le convention J@M da Ibiza a Dubai e in Italia, con la nostra creativa e insolita rete di vendita.",
      hero("art-mappa-convention", "J@M session", "Amiamo la condivisione. Per questo abbiamo dato inizio alle nostre Convention, momenti in cui riunire tutta la nostra creativa e insolita rete di vendita per celebrare gli obiettivi raggiunti con passione e inaugurare l’inizio di nuove avventure visionarie.", eyebrow="J@M Mood", ill="ill-session-globo", ill_alt="La ragazza J@M sul mappamondo", ctas='<a class="btn btn-primary" href="#perilmondo">nel mondo</a><a class="btn btn-outline" href="#conventionitalia">in Italia</a>', credit="La mappa delle convention J@M")
      + split("Le convention", "<p>In ogni Convention abbiamo portato la nostra isola per il mondo scegliendo dei luoghi speciali che sprigionassero la nostra stessa energia. Perché siamo una marea trascinante.</p><p>Requisiti per partecipare? Tanta voglia di avventura e nuove possibilità.</p>", "ill-nave-pirata", "La nave delle convention")
+     + art_band("art-gauguin", "In ogni Convention abbiamo portato la nostra isola per il mondo.", credit="Paul Gauguin, La siesta · Museo J@M", eyebrow="J@M Session")
      + '<section class="pad-s" id="perilmondo"><div class="wrap narrow"><p class="eyebrow" data-reveal>Nel mondo · …finora…</p><h2 class="mt" style="margin-bottom:40px" data-reveal>Nel mondo</h2>%s</div></section>' % tl(MONDO)
      + '<section class="pad-s" id="conventionitalia"><div class="wrap narrow"><p class="eyebrow" data-reveal>In Italia · …finora…</p><h2 class="mt" style="margin-bottom:40px" data-reveal>In Italia</h2>%s</div></section>' % tl(ITALIA)
      + videos(SESSION_IDS, eyebrow="In video", title="Le convention")
@@ -606,6 +676,7 @@ SEDI = [("sede-milano", "Milano", "Via Rutilia 2,4 · 20141 Milano (MI)"), ("sed
 page(BASE + "/i-villaggi/", "Sedi J@M | Scopri tutti i nostri villaggi virtuali e avamposti sulla terra ferma",
      "Le sedi di J@M: Milano, Cantù, Torino, Lecce, Bacău. Villaggi fisici e virtuali costruiti con passione ardente e follia creativa.",
      hero("art-magritte-golconda", "Una rete di villaggi", "Ci servivano tanti luoghi, fisici e virtuali, che ci aiutassero a non disperdere le nostre idee una volta uscite dalle nostre teste. Così ci siamo divertiti a invadere il territorio.", eyebrow="I villaggi", ill="ill-villaggi-virtuali", ill_alt="I villaggi virtuali di J@M", credit="René Magritte, Golconda · Museo J@M")
+     + art_band("art-rousseau", "Costruiti con passione ardente e follia creativa. Ogni sede ha la sua storia, la sua personalità, il suo stile.", credit="Henri Rousseau, L’incantatrice di serpenti · Museo J@M", eyebrow="I villaggi")
      + statement("Fatti prendere da J@M e fai un tour dei nostri villaggi: sono tappe obbligate. Costruiti con passione ardente e follia creativa. Ogni sede ha la sua storia, la sua personalità, il suo stile.", light="passione|follia|creativa")
      + '<section class="pad-s"><div class="wrap"><div class="sedi" data-stagger>%s</div></div></section>' % "".join('<div class="sede"><img src="%s/%s.webp" loading="lazy" alt="La sede J@M di %s"><h3>%s</h3><p>%s</p></div>' % (IMG, f, c, c, d) for f, c, d in SEDI)
      + split("Villaggi virtuali", "<p>Virtuali e fisici. Per J@M non esistono vincoli territoriali o di possibilità e le sue basi strategiche sono avamposti sulla terra ferma. E brulicano di vita.</p>", "ill-villaggi-virtuali", "I villaggi virtuali di J@M", ctas='<a class="btn btn-primary" href="https://goo.gl/maps/fMUuxLyYvvjXLSaB6" rel="noopener"><svg><use href="#i-pin"/></svg> trovaci</a><a class="link" href="%s/jm-mood/community/">la community %s</a>' % (BASE, chev))

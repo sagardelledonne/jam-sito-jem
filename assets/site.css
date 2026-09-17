@@ -361,3 +361,15 @@ body { background: #FFF7FB; }
 .wall-track figure img, .wall-grid figure img { box-shadow: 0 30px 60px -24px rgba(31,11,36,.5), 0 0 0 10px #fff, 0 0 0 12px #ff3fa4; }
 .mood-band h2, .art-hero h1 { color: var(--paper); }
 @media (max-width: 560px) { .art-hero .art.dim { opacity: .28; } .art-hero .veil { background: linear-gradient(to top, var(--bg) 0%, rgba(255,247,251,.75) 42%, rgba(255,247,251,.25) 75%, rgba(255,247,251,.55) 100%); } }
+
+.nav .dd .ddt { font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--pink); padding: 8px 14px 4px; font-weight: 700; }
+.menu .grp > a small { font-size: .8rem; letter-spacing: .1em; color: var(--muted); font-weight: 600; text-transform: uppercase; }
+
+/* ---- Opere "modificate un po'": velate di rosa-cielo, si accendono con i colori veri sotto il faro ---- */
+.art.dim { filter: saturate(.75) contrast(.95); opacity: .42; }
+.art-wrap::after { content: ""; position: absolute; inset: 0; background: linear-gradient(120deg, rgba(255,63,164,.22), rgba(255,212,0,.12) 50%, rgba(0,194,217,.2)); mix-blend-mode: soft-light; pointer-events: none; }
+.art.lit { -webkit-mask: radial-gradient(circle 460px at var(--mx, 50%) var(--my, 45%), #000 0%, rgba(0,0,0,.6) 45%, transparent 100%); mask: radial-gradient(circle 460px at var(--mx, 50%) var(--my, 45%), #000 0%, rgba(0,0,0,.6) 45%, transparent 100%); filter: saturate(1.15); }
+.art-band { min-height: 62svh; }
+.art-band .veil { background: linear-gradient(to right, rgba(255,247,251,.92) 0%, rgba(255,247,251,.55) 55%, rgba(255,247,251,.1) 100%); }
+.art-band blockquote { color: var(--paper); }
+@media (max-width: 560px) { .art.lit { -webkit-mask: radial-gradient(circle 240px at var(--mx, 50%) var(--my, 45%), #000 0%, rgba(0,0,0,.6) 45%, transparent 100%); mask: radial-gradient(circle 240px at var(--mx, 50%) var(--my, 45%), #000 0%, rgba(0,0,0,.6) 45%, transparent 100%); } }
