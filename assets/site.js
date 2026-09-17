@@ -178,18 +178,18 @@
         var pz = clamp((vh * 0.6 - zr.top) / (zr.height + vh * 0.2), 0, 1);
         if (zone.classList.contains("wall-pin")) { tx = zr.left + 20 + pz * (vw - gw - 40); ty = Math.max(gh * 0.45, vh * 0.62 - gh); }
         else { tx = zr.left + zr.width * 0.06 + pz * (zr.width * 0.88 - gw); ty = clamp(zr.top + zr.height * 0.66 - gh, gh * 0.45, vh - gh - 8); }
-        hop = -Math.abs(Math.sin(pz * Math.PI * 6)) * 26 * Math.min(1, Math.abs(g.vel) / 6);
-        ts = vw < 700 ? 1.15 : 1.35; facing = g.vel >= -0.5 ? 1 : -1; g.inArt = true;
+        hop = 0;
+        ts = vw < 700 ? 0.9 : 1; facing = g.vel >= -0.5 ? 1 : -1; g.inArt = true;
       } else {
         tx = vw - gw - Math.max(6, Math.min(30, vw * 0.02)); ty = vh * 0.14 + prog * vh * 0.66; ts = 1; g.inArt = false;
       }
-      g.x = lerp(g.x === undefined ? tx : g.x, tx, 0.07); g.y = lerp(g.y === undefined ? ty : g.y, ty, 0.07); g.s = lerp(g.s || 1, ts, 0.06);
+      g.x = lerp(g.x === undefined ? tx : g.x, tx, 0.05); g.y = lerp(g.y === undefined ? ty : g.y, ty, 0.05); g.s = lerp(g.s || 1, ts, 0.06);
       var gx = g.x + gw / 2, gy = g.y + gh * 0.4;
       var want = fine && mouse.active && !g.inArt ? clamp((mouse.x - gx) * 0.035, -14, 14) : 0;
-      g.rot = lerp(g.rot, want - clamp(g.vel, -30, 30) * 0.25, 0.08);
+      g.rot = lerp(g.rot, want - clamp(g.vel, -30, 30) * 0.1, 0.08);
       var wantFlip = g.inArt ? facing : (fine && mouse.active && mouse.x < gx - 40 ? -1 : 1);
       g.flip = lerp(g.flip, wantFlip, 0.12);
-      g.bob = Math.sin(now / 700) * 4 + Math.abs(g.vel) * 0.15 + hop;
+      g.bob = Math.sin(now / 900) * 3 + Math.min(6, Math.abs(g.vel) * 0.05) + hop;
       var lean = fine && mouse.active && !g.inArt ? clamp((mouse.y - gy) * 0.02, -6, 6) : 0;
       var idle = now - (g.lastMove || now) > 3500 && !g.inArt;
       if (idle && !g.sitting) { g.sitting = true; guide.src = guide.dataset.sit; }

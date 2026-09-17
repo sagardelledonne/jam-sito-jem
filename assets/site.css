@@ -101,7 +101,7 @@ section { position: relative; }
 @keyframes kenburns { from { transform: scale(1); } to { transform: scale(1.09); } }
 
 /* Personaggio guida: la ragazza dai capelli rossi */
-.guide { position: fixed; left: 0; top: 0; width: clamp(64px, 7.5vw, 118px); z-index: 60; pointer-events: none; will-change: transform; filter: drop-shadow(0 18px 30px rgba(0,0,0,.65)); transform-origin: 50% 92%; opacity: 0; transition: opacity .6s ease, filter .3s ease; }
+.guide { position: fixed; left: 0; top: 0; width: clamp(52px, 5.6vw, 88px); z-index: 60; pointer-events: none; will-change: transform; filter: drop-shadow(0 18px 30px rgba(0,0,0,.65)); transform-origin: 50% 92%; opacity: 0; transition: opacity .6s ease, filter .3s ease; }
 .guide.on { opacity: 1; }
 
 /* Sezione a due colonne con illustrazione */
@@ -291,7 +291,7 @@ body.js [data-stagger].in > :nth-child(6) { transition-delay: .4s; } body.js [da
   .art-hero .art.dim { filter: brightness(.3) saturate(.8); }
   .art-hero .veil { background: linear-gradient(to top, var(--bg) 0%, rgba(255,247,251,.78) 42%, rgba(255,247,251,.3) 75%, rgba(255,247,251,.5) 100%); }
   .art.lit { -webkit-mask: radial-gradient(circle 200px at var(--mx, 50%) var(--my, 45%), #000 0%, rgba(0,0,0,.55) 40%, transparent 100%); mask: radial-gradient(circle 200px at var(--mx, 50%) var(--my, 45%), #000 0%, rgba(0,0,0,.55) 40%, transparent 100%); }
-  .guide { width: 58px; }
+  .guide { width: 48px; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
