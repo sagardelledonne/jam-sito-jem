@@ -8,8 +8,8 @@
 
   /* ---------- Titolo di particelle ---------- */
   var LINES = ["TESTA, CUORE", "E SPIRITO", "D'INIZIATIVA"];
-  var PALETTE = ["#FF3FA4", "#FF2D4A", "#FF6A00", "#FFD400", "#3DF2FF", "#FFFFFF"];
-  var WEIGHTS = [0.30, 0.20, 0.18, 0.16, 0.10, 0.06];
+  var PALETTE = ["#FF3FA4", "#FF2D4A", "#FF6A00", "#FFB300", "#00C2D9", "#8A3FFF"];
+  var WEIGHTS = [0.30, 0.20, 0.18, 0.12, 0.10, 0.10];
   var hero = document.getElementById("home"), canvas = document.getElementById("heroCanvas"), slot = document.getElementById("wordSlot");
   if (!hero || !canvas || !slot) return;
   var ctx = canvas.getContext("2d");
@@ -66,7 +66,7 @@
     else if (state === "explode" && now - stateT > EXPLODE) { assign(); state = "form"; stateT = now; }
     ctx.globalCompositeOperation = "destination-out";
     ctx.fillStyle = state === "explode" ? "rgba(0,0,0,0.22)" : "rgba(0,0,0,0.45)"; ctx.fillRect(0, 0, W, H);
-    ctx.globalCompositeOperation = "lighter";
+    ctx.globalCompositeOperation = "source-over";
     var mx = mouse.x, my = mouse.y, R = 120, R2 = R * R, i, p;
     for (i = 0; i < N; i++) {
       p = parts[i];
