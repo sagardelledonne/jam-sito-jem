@@ -414,3 +414,11 @@ body { background: #FFF6F7; }
 
 /* testo sfumato leggibile: fragola -> oro (l'argento resta solo sui bottoni) */
 .grad, .statement .big .w.hot.on { background-image: linear-gradient(92deg, #FF2D55 0%, #E3173F 25%, #F2B705 55%, #C98F00 80%, #FF2D55 100%); }
+
+/* niente grigio: testi in prugna scuro */
+:root { --muted: #4A1F3A; }
+.lede, .split .txt p, .feat p, .card p, .step p, .faq .a, .statement .sub, .tstep p, .sede p, .num span, .contact .lede { color: #3B1230; }
+.eyebrow, .feat .k, .tstep .y { color: #D8103F; }
+.hero-home .lede { color: #2A0A12; }
+figcaption { color: #4A1F3A; }
+.site-footer, .site-footer nav a { color: #4A1F3A; }
